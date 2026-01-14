@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Source\window.cpp" />
+    <ClCompile Include="Source\Graphics.cpp" />
+    <ClCompile Include="Source\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Source\window.h" />
+    <ClInclude Include="Source\Graphics.h" />
+    <ClInclude Include="Source\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
