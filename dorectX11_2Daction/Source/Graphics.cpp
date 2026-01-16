@@ -112,3 +112,13 @@ HRESULT Graphics::InitD3D()
 
 	return S_OK;
 }
+
+void Graphics::DestroyD3D()
+{
+	SAFE_RELEASE(m_pSwapChain);
+	SAFE_RELEASE(m_pRenderTargetView);
+	SAFE_RELEASE(m_pDeviceContext);
+	SAFE_RELEASE(m_pDepthStencilView);
+	SAFE_RELEASE(m_pDepthStencil);
+	SAFE_RELEASE(m_pDevice);
+}
