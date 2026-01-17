@@ -12,11 +12,12 @@ class Graphics : public Window
 public:
 	HRESULT InitD3D();
 	void DestroyD3D();
+	void Render();
 
-	ID3D11Device* m_pDevice;
-	ID3D11DeviceContext* m_pDeviceContext;
-	IDXGISwapChain* m_pSwapChain;
-	ID3D11RenderTargetView* m_pRenderTargetView;
-	ID3D11DepthStencilView* m_pDepthStencilView;
-	ID3D11Texture2D* m_pDepthStencil;
+	ID3D11Device* m_pDevice = NULL;
+	ID3D11DeviceContext* m_pDeviceContext = NULL;
+	IDXGISwapChain* m_pSwapChain = NULL;
+	ID3D11RenderTargetView* m_pRenderTargetView = NULL;
+	ID3D11DepthStencilView* m_pDepthStencilView = NULL;
+	ID3D11Texture2D* m_pDepthStencil = NULL;
 };

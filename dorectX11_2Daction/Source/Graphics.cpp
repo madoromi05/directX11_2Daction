@@ -122,3 +122,13 @@ void Graphics::DestroyD3D()
 	SAFE_RELEASE(m_pDepthStencil);
 	SAFE_RELEASE(m_pDevice);
 }
+
+void Graphics::Render()
+{
+	//画面クリア（実際は単色で画面を塗りつぶす処理）
+	float ClearColor[4] = { 0,0,1,1 };// クリア色作成　RGBAの順
+	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, ClearColor);//画面クリア
+	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度バッファクリア
+
+	m_pSwapChain->Present(0, 0);//画面更新（バックバッファをフロントバッファに）	
+}

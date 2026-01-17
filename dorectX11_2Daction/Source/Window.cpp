@@ -1,30 +1,15 @@
 #include "Window.h"
 
 //グローバル変数
-Window* g_pMain = NULL;
-//関数プロトタイプの宣言
-LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+Window* g_pWindow = NULL;
 
-//アプリケーションのエントリー関数 
-INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT)
-{
-	g_pMain = new Window;
-	if (g_pMain != NULL)
-	{
-		if (SUCCEEDED(g_pMain->InitWindow(hInstance, 0, 0, WINDOW_WIDTH,
-			WINDOW_HEIGHT, APP_NAME)))
-		{
-			g_pMain->Run();
-		}
-		delete g_pMain;
-	}
-	return 0;
-}
-
-//OSから見たウィンドウプロシージャー（実際の処理はMAINクラスのプロシージャーで処理）
+// OSから見たウィンドウプロシージャー
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	return g_pMain->MsgProc(hWnd, uMsg, wParam, lParam);
+	if (g_pWindow) {
+		return g_pWindow->MsgProc(hWnd, uMsg, wParam, lParam);
+	}
+	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
 //ウィンドウ作成
@@ -80,7 +65,7 @@ LRESULT Window::MsgProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 }
 
 //メッセージループとアプリケーション処理の入り口
-void Window::Run()
+void Window::Update()
 {
 	// メッセージループ
 	MSG msg = { 0 };
@@ -94,8 +79,15 @@ void Window::Run()
 		}
 		else
 		{
-			//アプリケーションの処理はここから飛ぶ。
+			//アプリケーションの処理はここから
+			App();
 		}
 	}
 	//アプリケーションの終了
+}
+
+//アプリケーション処理。アプリのメイン関数。
+void Window::App()
+{
+	Render();
 }

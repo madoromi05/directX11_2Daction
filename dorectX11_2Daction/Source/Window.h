@@ -9,9 +9,15 @@
 class Window
 {
 public:
+	virtual ~Window() {}
+
 	HRESULT InitWindow(HINSTANCE, INT, INT, INT, INT, LPCWSTR);
 	LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
-	void Run();
 
-	HWND m_hWnd;
+	void Update();
+	void App();
+	virtual void Render() {};
+
+protected: // Graphicsクラスからアクセスできるように変更
+	HWND m_hWnd = NULL;
 };
