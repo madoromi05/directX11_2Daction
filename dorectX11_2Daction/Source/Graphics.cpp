@@ -123,6 +123,36 @@ void Graphics::DestroyD3D()
 	SAFE_RELEASE(m_pDevice);
 }
 
+HRESULT Graphics::InitPolygon()
+{
+	//バーテックスバッファー作成
+	SimpleVertex vertices[] =
+	{
+		XMFLOAT3(0.0f, 0.5f, 0.0f),
+		XMFLOAT3(0.5f, -0.5f, 0.0f),
+		XMFLOAT3(-0.5f, -0.5f, 0.0f),
+	};
+	D3D11_BUFFER_DESC bd;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(SimpleVertex) * 3;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+	bd.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	InitData.pSysMem = vertices;
+	if (FAILED(m_pDevice->CreateBuffer(&bd, &InitData, &m_pVertexBuffer)))
+	{
+		return E_FAIL;
+	}
+	//バーテックスバッファーをセット
+	UINT stride = sizeof(SimpleVertex);
+	UINT offset = 0;
+	m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+
+	return S_OK;
+}
+
 void Graphics::Render()
 {
 	//画面クリア（実際は単色で画面を塗りつぶす処理）
@@ -130,5 +160,128 @@ void Graphics::Render()
 	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, ClearColor);//画面クリア
 	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度バッファクリア
 
+	float angle = (float)timeGetTime() / 1000.0f;
+	XMMATRIX mWorld = XMMatrixRotationY(angle);
+
+	// ビュートランスフォーム（視点座標変換）
+	XMVECTOR vEyePt = XMVectorSet(0.0f, 1.0f, -2.0f, 0.0f); // カメラ位置
+	XMVECTOR vLookatPt = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);  // 注視位置
+	XMVECTOR vUpVec = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);  // 上方位置
+	XMMATRIX mView = XMMatrixLookAtLH(vEyePt, vLookatPt, vUpVec);
+
+	// プロジェクション行列（射影）
+	XMMATRIX mProj = XMMatrixPerspectiveFovLH(XM_PI / 4.0f, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
+
+	//使用するシェーダーの登録	
+	m_pDeviceContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pDeviceContext->PSSetShader(m_pPixelShader, NULL, 0);
+	
+	// 4. コンスタントバッファの更新
+	D3D11_MAPPED_SUBRESOURCE pData;
+	if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
+	{
+		SimpleShaderConstantBuffer cb;
+
+		// 行列を合成 ( ワールド * ビュー * プロジェクション )
+		XMMATRIX mWVP = mWorld * mView * mProj;
+
+		// シェーダーに送るために転置する (Row-Major -> Column-Major)
+		mWVP = XMMatrixTranspose(mWVP);
+
+		// XMMATRIX(計算用) から XMFLOAT4X4(保存用) へ変換して格納
+		XMStoreFloat4x4(&cb.mWVP, mWVP);
+
+		// カラーの設定
+		cb.vColor = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+
+		// メモリコピー
+		memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
+
+		m_pDeviceContext->Unmap(m_pConstantBuffer, 0);
+	}
+
+	//このコンスタントバッファーを使うシェーダーの登録
+	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	//頂点インプットレイアウトをセット
+	m_pDeviceContext->IASetInputLayout(m_pVertexLayout);
+	//プリミティブ・トポロジーをセット
+	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//プリミティブをレンダリング
+	m_pDeviceContext->Draw(3, 0);
+
 	m_pSwapChain->Present(0, 0);//画面更新（バックバッファをフロントバッファに）	
+}
+
+HRESULT Graphics::InitPipeline()
+{
+	HRESULT hr = S_OK;
+	
+	// 実行ファイル（exe）のあるパスを取得する
+	WCHAR path[MAX_PATH];
+	GetModuleFileName(NULL, path, MAX_PATH);
+	PathRemoveFileSpec(path); // ファイル名（exe）を削ってフォルダパスだけにする
+
+	// フォルダパスとファイル名を結合して、絶対パスを作る
+	WCHAR vsPath[MAX_PATH];
+	wcscpy_s(vsPath, path);
+	wcscat_s(vsPath, L"\\VertexShader.cso");
+
+	WCHAR psPath[MAX_PATH];
+	wcscpy_s(psPath, path);
+	wcscat_s(psPath, L"\\PixelShader.cso");
+
+	// 作ったパスを使って読み込む
+	ID3DBlob* pVSBlob = NULL;
+
+	// VertexShader.cso はビルド時に自動生成されます
+	hr = D3DReadFileToBlob(vsPath, &pVSBlob);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, L"VertexShader.cso が見つかりません。", L"エラー", MB_OK);
+		return hr;
+	}
+
+	// バーテックスシェーダーの作成
+	hr = m_pDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &m_pVertexShader);
+	if (FAILED(hr)) { pVSBlob->Release(); return hr; }
+
+	// インプットレイアウトの作成
+	D3D11_INPUT_ELEMENT_DESC layout[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+	UINT numElements = ARRAYSIZE(layout);
+
+	hr = m_pDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), &m_pVertexLayout);
+	pVSBlob->Release();
+	if (FAILED(hr)) return hr;
+
+	// ピクセルシェーダーも同様に .cso を読み込む
+	ID3DBlob* pPSBlob = NULL;
+	hr = D3DReadFileToBlob(psPath, &pPSBlob);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, L"PixelShader.cso が見つかりません。", L"エラー", MB_OK);
+		return hr;
+	}
+
+	// ピクセルシェーダーの作成
+	hr = m_pDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &m_pPixelShader);
+	pPSBlob->Release();
+	if (FAILED(hr)) return hr;
+
+	// コンスタントバッファの作成
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DYNAMIC;
+	bd.ByteWidth = sizeof(SimpleShaderConstantBuffer);
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bd.MiscFlags = 0;
+
+	hr = m_pDevice->CreateBuffer(&bd, NULL, &m_pConstantBuffer);
+	if (FAILED(hr)) return hr;
+
+	return S_OK;
 }

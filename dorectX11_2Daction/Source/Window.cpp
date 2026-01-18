@@ -16,6 +16,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 HRESULT Window::InitWindow(HINSTANCE hInstance,
 	INT iX, INT iY, INT iWidth, INT iHeight, LPCWSTR WindowName)
 {
+	g_pWindow = this;
 	// ウィンドウの定義
 	WNDCLASSEX  wc;
 	ZeroMemory(&wc, sizeof(wc));
