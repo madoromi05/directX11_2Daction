@@ -13,6 +13,7 @@
 #pragma comment(lib, "d3dcompiler.lib")
 
 #define SAFE_RELEASE(x) if(x){x->Release(); x=NULL;}
+#define MAX_MODEL 1000 //モデル最大数
 
 using namespace DirectX;
 
@@ -21,9 +22,17 @@ struct SimpleVertex
 	XMFLOAT3 Pos;
 };
 
+//Simpleシェーダー用のコンスタントバッファーのアプリ側構造体 もちろんシェーダー内のコンスタントバッファーと一致している必要あり
 struct SimpleShaderConstantBuffer
 {
 	XMFLOAT4X4 mWVP;
+	XMFLOAT4 vColor;
+};
+
+//物体の構造体
+struct SinpleModel//このサンプルでは単なる三角ポリゴン
+{
+	XMFLOAT3 vPos;
 	XMFLOAT4 vColor;
 };
 
@@ -50,4 +59,7 @@ public:
 	ID3D11Buffer* m_pConstantBuffer;
 	// モデルごと	
 	ID3D11Buffer* m_pVertexBuffer;
+	//モデルのインスタンス配列
+	SinpleModel m_Model[MAX_MODEL];
+	int m_iNumModel;
 };

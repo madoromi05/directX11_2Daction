@@ -150,6 +150,13 @@ HRESULT Graphics::InitPolygon()
 	UINT offset = 0;
 	m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
+	for (int i = 0; i < MAX_MODEL; i++)
+	{
+		m_Model[i].vPos = XMFLOAT3(float(rand()) / 1000.0f - 16.0f, float(rand()) / 1000.0f - 16.0f, float(rand()) / 1000.0f + 10.0f);//初期位置はランダム
+		m_Model[i].vColor = XMFLOAT4(float(rand()) / 32767.0f, float(rand()) / 32767.0f, float(rand()) / 32767.0f, 1.0f);//色もランダム
+	}
+	m_iNumModel = MAX_MODEL;
+
 	return S_OK;
 }
 
@@ -175,30 +182,6 @@ void Graphics::Render()
 	//使用するシェーダーの登録	
 	m_pDeviceContext->VSSetShader(m_pVertexShader, NULL, 0);
 	m_pDeviceContext->PSSetShader(m_pPixelShader, NULL, 0);
-	
-	// 4. コンスタントバッファの更新
-	D3D11_MAPPED_SUBRESOURCE pData;
-	if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
-	{
-		SimpleShaderConstantBuffer cb;
-
-		// 行列を合成 ( ワールド * ビュー * プロジェクション )
-		XMMATRIX mWVP = mWorld * mView * mProj;
-
-		// シェーダーに送るために転置する (Row-Major -> Column-Major)
-		mWVP = XMMatrixTranspose(mWVP);
-
-		// XMMATRIX(計算用) から XMFLOAT4X4(保存用) へ変換して格納
-		XMStoreFloat4x4(&cb.mWVP, mWVP);
-
-		// カラーの設定
-		cb.vColor = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
-
-		// メモリコピー
-		memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
-
-		m_pDeviceContext->Unmap(m_pConstantBuffer, 0);
-	}
 
 	//このコンスタントバッファーを使うシェーダーの登録
 	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
@@ -208,9 +191,40 @@ void Graphics::Render()
 	//プリミティブ・トポロジーをセット
 	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//プリミティブをレンダリング
-	m_pDeviceContext->Draw(3, 0);
 
-	m_pSwapChain->Present(0, 0);//画面更新（バックバッファをフロントバッファに）	
+	angle = (float)timeGetTime() / 1000.0f;
+
+	for (int i = 0; i < m_iNumModel; i++)
+	{
+		// ワールド行列作成（回転 ＋ 位置）
+		XMMATRIX mRot = XMMatrixRotationY(angle);
+		XMMATRIX mTrans = XMMatrixTranslation(m_Model[i].vPos.x, m_Model[i].vPos.y, m_Model[i].vPos.z);
+		XMMATRIX mWorld = mRot * mTrans;
+
+		// コンスタントバッファ更新
+		D3D11_MAPPED_SUBRESOURCE pData;
+		if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
+		{
+			SimpleShaderConstantBuffer cb;
+
+			// 行列合成
+			XMMATRIX mWVP = mWorld * mView * mProj;
+			mWVP = XMMatrixTranspose(mWVP);
+			XMStoreFloat4x4(&cb.mWVP, mWVP);
+
+			// 色設定
+			cb.vColor = m_Model[i].vColor;
+
+			memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
+			m_pDeviceContext->Unmap(m_pConstantBuffer, 0);
+		}
+
+		// 描画
+		m_pDeviceContext->Draw(3, 0);
+	}
+
+	// 4. 最後に1回だけ画面更新
+	m_pSwapChain->Present(0, 0);
 }
 
 HRESULT Graphics::InitPipeline()
@@ -218,16 +232,16 @@ HRESULT Graphics::InitPipeline()
 	HRESULT hr = S_OK;
 	
 	// 実行ファイル（exe）のあるパスを取得する
-	WCHAR path[MAX_PATH];
+	WCHAR path[MAX_PATH] = { 0 };
 	GetModuleFileName(NULL, path, MAX_PATH);
 	PathRemoveFileSpec(path); // ファイル名（exe）を削ってフォルダパスだけにする
 
 	// フォルダパスとファイル名を結合して、絶対パスを作る
-	WCHAR vsPath[MAX_PATH];
+	WCHAR vsPath[MAX_PATH] = { 0 };
 	wcscpy_s(vsPath, path);
 	wcscat_s(vsPath, L"\\VertexShader.cso");
 
-	WCHAR psPath[MAX_PATH];
+	WCHAR psPath[MAX_PATH] = { 0 };
 	wcscpy_s(psPath, path);
 	wcscat_s(psPath, L"\\PixelShader.cso");
 
