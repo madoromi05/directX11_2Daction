@@ -86,9 +86,3 @@ void Window::Update()
 	}
 	//アプリケーションの終了
 }
-
-//アプリケーション処理。アプリのメイン関数。
-void Window::App()
-{
-	Render();
-}

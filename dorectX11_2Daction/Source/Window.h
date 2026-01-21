@@ -15,7 +15,7 @@ public:
 	LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
 
 	void Update();
-	void App();
+	virtual void App() = 0;
 	virtual void Render() {};
 
 protected: // Graphicsクラスからアクセスできるように変更

@@ -223,7 +223,7 @@ void Graphics::Render()
 		m_pDeviceContext->Draw(3, 0);
 	}
 
-	// 4. 最後に1回だけ画面更新
+	// 最後に1回だけ画面更新
 	m_pSwapChain->Present(0, 0);
 }
 
@@ -298,4 +298,14 @@ HRESULT Graphics::InitPipeline()
 	if (FAILED(hr)) return hr;
 
 	return S_OK;
+}
+
+void Graphics::App()
+{
+	for (int i = 0; i < m_iNumModel; i++) {
+		m_Model[i].vPos.x += 0.001f;
+	}
+
+	// 描画処理を呼ぶ
+	Render();
 }

@@ -13,7 +13,7 @@
 #pragma comment(lib, "d3dcompiler.lib")
 
 #define SAFE_RELEASE(x) if(x){x->Release(); x=NULL;}
-#define MAX_MODEL 1000 //ƒ‚ƒfƒ‹Å‘å”
+#define MAX_MODEL 50 //ƒ‚ƒfƒ‹Å‘å”
 
 using namespace DirectX;
 
@@ -42,7 +42,8 @@ public:
 	HRESULT InitD3D();
 	HRESULT InitPolygon();
 	HRESULT InitPipeline();
-	void Render();
+	void App() override;
+	void Render() override;
 	void DestroyD3D();
 
 	ID3D11Device* m_pDevice = NULL;
