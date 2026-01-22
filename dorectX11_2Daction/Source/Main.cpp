@@ -1,5 +1,5 @@
 #include <windows.h>
-#include "Graphics.h" 
+#include "Graphics/Graphics.h" 
 
 Graphics* g_pApp = NULL;
 

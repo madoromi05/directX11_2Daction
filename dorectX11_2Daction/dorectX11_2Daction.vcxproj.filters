@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Graphics.cpp">
+    <ClCompile Include="Source\Graphics\Graphics.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Window.cpp">
@@ -29,14 +29,16 @@
     <ClInclude Include="Source\Window.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics.h">
+    <ClInclude Include="Source\Graphics\Graphics.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Source\VertexShader.hlsl">
+    <FxCompile Include="Source\assets\shaders\VertexShader.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Source\PixelShader.hlsl" />
+    <FxCompile Include="Source\assets\shaders\PixelShader.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
