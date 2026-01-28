@@ -1,17 +1,17 @@
 #include <windows.h>
-#include "Graphics/Graphics.h" 
+#include "Graphics/Graphics.h"
 
-Graphics* g_pApp = NULL;
+game::Graphics* g_pApp = NULL;
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, INT nCmdShow)
 {
     // Windowクラスではなく、Graphicsクラスの実体を作る
     // これにより、Windowの機能とGraphicsの機能の両方が使えるようになります
-    g_pApp = new Graphics();
+    g_pApp = new game::Graphics();
 
     if (g_pApp != NULL)
     {
-        // ウィンドウ作成
+        // ウィンドウ作成 (継承元のengin::Windowのメソッド)
         if (FAILED(g_pApp->InitWindow(hInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, APP_NAME)))
         {
             MessageBox(NULL, L"ウィンドウ作成に失敗しました", L"エラー", MB_OK);
@@ -43,7 +43,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             return 0;
         }
 
-        // ゲームループ開始 (Window::Update)
+        // ゲームループ開始 (engin::Window::Update)
         g_pApp->Update();
 
 
