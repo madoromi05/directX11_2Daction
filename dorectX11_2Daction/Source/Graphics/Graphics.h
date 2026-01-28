@@ -35,7 +35,7 @@ namespace engin
 		// 初期化・終了
 		HRESULT InitD3D(HWND hWnd, int width, int height);
 		HRESULT InitPipeline();
-		HRESULT InitModelBuffer(); // 汎用的なモデル（今回は三角形）のバッファ作成
+		HRESULT InitModelBuffer(); // 汎用的なモデル（今回は三角形)
 		void DestroyD3D();
 
 		// 描画制御

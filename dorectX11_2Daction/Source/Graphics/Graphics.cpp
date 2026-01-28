@@ -1,5 +1,5 @@
 #include "Graphics.h"
-#include <shlwapi.h> // PathRemoveFileSpec—p
+#include <shlwapi.h>
 
 #pragma comment(lib, "shlwapi.lib")
 
