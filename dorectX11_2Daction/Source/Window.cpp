@@ -6,11 +6,9 @@ namespace engin
 	Window* g_pWindow = NULL;
 
 	// OSから見たウィンドウプロシージャー
-	LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	LRESULT CALLBACK Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
-		if (g_pWindow) {
-			return g_pWindow->MsgProc(hWnd, uMsg, wParam, lParam);
-		}
+		if (g_pWindow) return g_pWindow->MsgProc(hWnd, uMsg, wParam, lParam);
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 
@@ -50,42 +48,23 @@ namespace engin
 	//ウィンドウプロシージャー
 	LRESULT Window::MsgProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	{
-		switch (iMsg)
+		if (iMsg == WM_DESTROY || (iMsg == WM_KEYDOWN && wParam == VK_ESCAPE))
 		{
-		case WM_KEYDOWN:
-			switch ((char)wParam)
-			{
-			case VK_ESCAPE://ESCキーで修了
-				PostQuitMessage(0);
-				break;
-			}
-			break;
-		case WM_DESTROY:
 			PostQuitMessage(0);
-			break;
+			return 0;
 		}
 		return DefWindowProc(hWnd, iMsg, wParam, lParam);
 	}
-
-	//メッセージループとアプリケーション処理の入り口
-	void Window::Update()
+	//メッセージループの入り口
+	bool Window::ProcessMessage()
 	{
-		// メッセージループ
 		MSG msg = { 0 };
-		ZeroMemory(&msg, sizeof(msg));
-		while (msg.message != WM_QUIT)
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
-			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-			else
-			{
-				//アプリケーションの処理はここから
-				App();
-			}
+			if (msg.message == WM_QUIT) return false; // 終了
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 		}
-		//アプリケーションの終了
+		return true; // 継続
 	}
 }

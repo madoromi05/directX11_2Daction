@@ -8,23 +8,26 @@
 
 namespace game
 {
-	class Game : public engin::Window
+	class Game
 	{
 	public:
 		Game();
 		~Game();
 
-		// Windowクラスの純粋仮想関数を実装
-		void App() override;
-
 		// ゲーム初期化
 		HRESULT Init(HINSTANCE hInstance, int width, int height, LPCWSTR name);
-
+		// ゲームループ
+		void Run();
 	private:
-		// エンジン機能（コンポジションで持つ）
-		engin::Graphics* m_pGraphics;
+		void Update();
+		void Render();
 
-		// ゲームデータ
+		engin::Window* m_pWindow = NULL;
+		engin::Graphics* m_pGraphics = NULL;
+
+		// 共有のリソースとしてMeshを持つ
+		engin::Mesh* m_pTriangleMesh = NULL;
+
 		std::vector<GameObject> m_GameObjects;
 	};
 }

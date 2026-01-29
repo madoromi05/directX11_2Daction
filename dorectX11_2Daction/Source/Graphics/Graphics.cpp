@@ -135,33 +135,13 @@ namespace engin
 		return S_OK;
 	}
 
-	HRESULT Graphics::InitModelBuffer()
-	{
-		SimpleVertex vertices[] = {
-			XMFLOAT3(0.0f, 0.5f, 0.0f),
-			XMFLOAT3(0.5f, -0.5f, 0.0f),
-			XMFLOAT3(-0.5f, -0.5f, 0.0f),
-		};
-		D3D11_BUFFER_DESC bd;
-		ZeroMemory(&bd, sizeof(bd));
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(SimpleVertex) * 3;
-		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-		D3D11_SUBRESOURCE_DATA InitData;
-		ZeroMemory(&InitData, sizeof(InitData));
-		InitData.pSysMem = vertices;
-
-		return m_pDevice->CreateBuffer(&bd, &InitData, &m_pVertexBuffer);
-	}
-
 	void Graphics::DestroyD3D()
 	{
 		SAFE_RELEASE(m_pVertexLayout);
 		SAFE_RELEASE(m_pVertexShader);
 		SAFE_RELEASE(m_pPixelShader);
 		SAFE_RELEASE(m_pConstantBuffer);
-		SAFE_RELEASE(m_pVertexBuffer);
+		//SAFE_RELEASE(m_pVertexBuffer);
 		SAFE_RELEASE(m_pSwapChain);
 		SAFE_RELEASE(m_pRenderTargetView);
 		SAFE_RELEASE(m_pDeviceContext);
@@ -172,22 +152,22 @@ namespace engin
 
 	void Graphics::BeginRender()
 	{
-		float ClearColor[4] = { 0.0f, 0.0f, 0.2f, 1.0f }; // 少し暗い青
+		// 1. 画面を青色でクリアする (必須)
+		float ClearColor[4] = { 0.0f, 0.0f, 0.2f, 1.0f };
 		m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, ClearColor);
+
+		// 2. 深度バッファをクリアする (必須)
 		m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-		// パイプライン設定
+		// 3. シェーダーや定数バッファをセットする (必須)
 		m_pDeviceContext->VSSetShader(m_pVertexShader, NULL, 0);
 		m_pDeviceContext->PSSetShader(m_pPixelShader, NULL, 0);
 		m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 		m_pDeviceContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+
+		// 4. 入力レイアウトとトポロジーの設定 (必須)
 		m_pDeviceContext->IASetInputLayout(m_pVertexLayout);
 		m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		// 頂点バッファ設定（今回は1種類固定）
-		UINT stride = sizeof(SimpleVertex);
-		UINT offset = 0;
-		m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 	}
 
 	void Graphics::EndRender()
@@ -207,26 +187,26 @@ namespace engin
 		XMStoreFloat4x4(&m_mProj, proj);
 	}
 
-	void Graphics::Draw(CXMMATRIX worldMatrix, const XMFLOAT4& color)
+	void Graphics::Draw(Mesh* pMesh, CXMMATRIX worldMatrix, const XMFLOAT4& color)
 	{
-		D3D11_MAPPED_SUBRESOURCE pData;
-		if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
-		{
-			SimpleShaderConstantBuffer cb;
-
-			// 行列合成 (World * View * Proj)
-			XMMATRIX view = XMLoadFloat4x4(&m_mView);
-			XMMATRIX proj = XMLoadFloat4x4(&m_mProj);
-			XMMATRIX wvp = worldMatrix * view * proj;
-
-			wvp = XMMatrixTranspose(wvp);
-			XMStoreFloat4x4(&cb.mWVP, wvp);
-			cb.vColor = color;
-
-			memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
-			m_pDeviceContext->Unmap(m_pConstantBuffer, 0);
-		}
-
-		m_pDeviceContext->Draw(3, 0);
+	D3D11_MAPPED_SUBRESOURCE pData;
+	if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
+	{
+		SimpleShaderConstantBuffer cb;
+		XMMATRIX view = XMLoadFloat4x4(&m_mView);
+		XMMATRIX proj = XMLoadFloat4x4(&m_mProj);
+		XMMATRIX wvp = worldMatrix * view * proj;
+		wvp = XMMatrixTranspose(wvp);
+		XMStoreFloat4x4(&cb.mWVP, wvp);
+		cb.vColor = color;
+		memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
+		m_pDeviceContext->Unmap(m_pConstantBuffer, 0);
 	}
+
+	// Meshに描画命令を出させる
+	if (pMesh)
+	{
+		pMesh->Draw(m_pDeviceContext);
+	}
+}
 }

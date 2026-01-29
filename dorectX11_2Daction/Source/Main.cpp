@@ -21,7 +21,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
 
         // ゲームループ開始
-        g_pGame->Update();
+        g_pGame-> Run();
 
         // 終了処理
         delete g_pGame;

@@ -1,5 +1,6 @@
 #pragma once
-#include <windows.h>
+//#include <windows.h>
+#include "Mesh.h"
 #include <d3d11.h>
 #include <DirectXMath.h> 
 #include <d3dcompiler.h>
@@ -14,10 +15,10 @@ using namespace DirectX;
 namespace engin
 {
 	// 頂点フォーマットはエンジン側で定義
-	struct SimpleVertex
-	{
-		XMFLOAT3 Pos;
-	};
+	//struct SimpleVertex
+	//{
+	//	XMFLOAT3 Pos;
+	//};
 
 	// 定数バッファ
 	struct SimpleShaderConstantBuffer
@@ -35,7 +36,6 @@ namespace engin
 		// 初期化・終了
 		HRESULT InitD3D(HWND hWnd, int width, int height);
 		HRESULT InitPipeline();
-		HRESULT InitModelBuffer(); // 汎用的なモデル（今回は三角形)
 		void DestroyD3D();
 
 		// 描画制御
@@ -47,7 +47,8 @@ namespace engin
 		void SetProjection(float fov, float aspect, float nearZ, float farZ);
 
 		// 個別描画（ワールド行列と色を受け取って描画）
-		void Draw(CXMMATRIX worldMatrix, const XMFLOAT4& color);
+		void Draw(Mesh* pMesh, CXMMATRIX worldMatrix, const XMFLOAT4& color);
+		ID3D11Device* GetDevice() const { return m_pDevice; }
 
 	private:
 		ID3D11Device* m_pDevice = NULL;
@@ -61,9 +62,6 @@ namespace engin
 		ID3D11VertexShader* m_pVertexShader = NULL;
 		ID3D11PixelShader* m_pPixelShader = NULL;
 		ID3D11Buffer* m_pConstantBuffer = NULL;
-
-		// 共有リソース（今回は単純化のため1つのモデルバッファを持つ）
-		ID3D11Buffer* m_pVertexBuffer = NULL;
 
 		// 行列保存用
 		XMFLOAT4X4 m_mView;

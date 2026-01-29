@@ -11,16 +11,16 @@ namespace engin
 	class Window
 	{
 	public:
-		virtual ~Window() {}
+		Window() {};
+		~Window() {};
 
 		HRESULT InitWindow(HINSTANCE, INT, INT, INT, INT, LPCWSTR);
-		LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
+		bool ProcessMessage();
+		HWND GetHWND() const { return m_hWnd; }
 
-		void Update();
-		virtual void App() = 0;
-		virtual void Render() {};
-
-	protected:
+	private:
 		HWND m_hWnd = NULL;
+		LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
+		static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 	};
 }
