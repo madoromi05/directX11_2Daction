@@ -14,12 +14,12 @@ namespace engin
 		Window() {};
 		~Window() {};
 
-		HRESULT InitWindow(HINSTANCE, INT, INT, INT, INT, LPCWSTR);
+		HRESULT InitWindow(HINSTANCE, INT, INT, INT, INT, LPCWSTR windowName);
 		bool ProcessMessage();
 		HWND GetHWND() const { return m_hWnd; }
 
 	private:
-		HWND m_hWnd = NULL;
+		HWND m_hWnd = nullptr;
 		LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
 		static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 	};

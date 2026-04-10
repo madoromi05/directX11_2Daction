@@ -14,7 +14,7 @@ namespace engin
 
 	//ウィンドウ作成
 	HRESULT Window::InitWindow(HINSTANCE hInstance,
-		INT iX, INT iY, INT iWidth, INT iHeight, LPCWSTR WindowName)
+		INT iX, INT iY, INT iWidth, INT iHeight, LPCWSTR windowName)
 	{
 		g_pWindow = this;
 		// ウィンドウの定義
@@ -27,12 +27,12 @@ namespace engin
 		wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wc.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
-		wc.lpszClassName = WindowName;
+		wc.lpszClassName = windowName;
 		wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 		RegisterClassEx(&wc);
 
 		//ウィンドウの作成
-		m_hWnd = CreateWindow(WindowName, WindowName, WS_OVERLAPPEDWINDOW,
+		m_hWnd = CreateWindow(windowName, windowName, WS_OVERLAPPEDWINDOW,
 			0, 0, iWidth, iHeight, 0, 0, hInstance, 0);
 		if (!m_hWnd)
 		{
@@ -46,14 +46,14 @@ namespace engin
 	}
 
 	//ウィンドウプロシージャー
-	LRESULT Window::MsgProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
+	LRESULT Window::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
-		if (iMsg == WM_DESTROY || (iMsg == WM_KEYDOWN && wParam == VK_ESCAPE))
+		if (uMsg == WM_DESTROY || (uMsg == WM_KEYDOWN && wParam == VK_ESCAPE))
 		{
 			PostQuitMessage(0);
 			return 0;
 		}
-		return DefWindowProc(hWnd, iMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 	//メッセージループの入り口
 	bool Window::ProcessMessage()

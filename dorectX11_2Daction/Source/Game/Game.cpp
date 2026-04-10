@@ -10,24 +10,17 @@ namespace game
 	{
 		if (m_pTriangleMesh) delete m_pTriangleMesh;
 		if (m_pGraphics) delete m_pGraphics;
-		if (m_pWindow) delete m_pWindow;
 	}
 
-	HRESULT Game::Init(HINSTANCE hInstance, int width, int height, LPCWSTR name)
+	HRESULT Game::Init(HWND hWnd, int width, int height)
 	{
-		// 1. Window作成
-		m_pWindow = new engin::Window();
-		if (FAILED(m_pWindow->InitWindow(hInstance, 0, 0, width, height, name)))
-		{
-			return E_FAIL;
-		}
-		// 2. Graphics作成
+		m_screenWidth = width;
+		m_screenHeight = height;
+
 		m_pGraphics = new engin::Graphics();
-		// Windowハンドルは m_pWindow経由で取得
-		if (FAILED(m_pGraphics->InitD3D(m_pWindow->GetHWND(), width, height))) return E_FAIL;
+		if (FAILED(m_pGraphics->InitD3D(hWnd, width, height))) return E_FAIL;
 		if (FAILED(m_pGraphics->InitPipeline())) return E_FAIL;
 
-		// 3. Mesh作成
 		m_pTriangleMesh = new engin::Mesh();
 		engin::SimpleVertex vertices[] = {
 			XMFLOAT3(0.0f, 0.5f, 0.0f),
@@ -37,21 +30,21 @@ namespace game
 		// Device取得もゲッター経由で
 		if (FAILED(m_pTriangleMesh->Init(m_pGraphics->GetDevice(), vertices, 3))) return E_FAIL;
 
-		// 4. ゲームオブジェクト初期化
-		m_GameObjects.resize(MAX_MODEL);
+		// ゲームオブジェクト初期化
+		m_gameObjects.resize(MAX_MODEL);
 		for (int i = 0; i < MAX_MODEL; i++)
 		{
 			// ランダム位置
 			float x = float(rand()) / 1000.0f - 16.0f;
 			float y = float(rand()) / 1000.0f - 16.0f;
 			float z = float(rand()) / 1000.0f + 10.0f;
-			m_GameObjects[i].SetPos(XMFLOAT3(x, y, z));
+			m_gameObjects[i].SetPos(XMFLOAT3(x, y, z));
 
 			// ランダム色
 			float r = float(rand()) / 32767.0f;
 			float g = float(rand()) / 32767.0f;
 			float b = float(rand()) / 32767.0f;
-			m_GameObjects[i].SetColor(XMFLOAT4(r, g, b, 1.0f));
+			m_gameObjects[i].SetColor(XMFLOAT4(r, g, b, 1.0f));
 
 			// 初期回転もランダムにするならここで SetRotation
 		}
@@ -59,28 +52,15 @@ namespace game
 		return S_OK;
 	}
 
-	void Game::Run()
-	{
-		while (true)
-		{
-			// Windowのメッセージ処理。
-			if (!m_pWindow->ProcessMessage()) break;
-
-			Update();
-			Render();
-		}
-	}
-
 	void Game::Update()
 	{
-		for (auto& obj : m_GameObjects) {
+		for (auto& obj : m_gameObjects) {
 			obj.Update();
 		}
 	}
 	
 	void Game::Render()
 	{
-		// 描画準備
 		m_pGraphics->BeginRender();
 
 		// カメラ設定（回転などあればここで計算）
@@ -90,23 +70,20 @@ namespace game
 			XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)   // Up
 		);
 		// プロジェクション設定
-		RECT rc;
-		GetClientRect(m_pWindow->GetHWND(), &rc);
-		float width = (float)(rc.right - rc.left);
-		float height = (float)(rc.bottom - rc.top);
-		m_pGraphics->SetProjection(XM_PI / 4.0f, width / height, 0.1f, 100.0f);
+		float aspect = (float)m_screenWidth / (float)m_screenHeight; 
+		m_pGraphics->SetProjection(XM_PI / 4.0f, aspect, 0.1f, 100.0f);
 
-		// 3. 全オブジェクト描画
+		// 全オブジェクト描画
 		float angle = (float)timeGetTime() / 1000.0f;
 		XMMATRIX mRot = XMMatrixRotationY(angle);
 
-		for (const auto& obj : m_GameObjects)
+		for (const auto& obj : m_gameObjects)
 		{
 			XMMATRIX mWorld = obj.GetWorldMatrix();
 			m_pGraphics->Draw(m_pTriangleMesh, mWorld, obj.GetColor());
 		}
 
-		// 4. 描画終了
+		// 描画終了
 		m_pGraphics->EndRender();
 	}
 }

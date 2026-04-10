@@ -15,19 +15,17 @@ namespace game
 		~Game();
 
 		// ゲーム初期化
-		HRESULT Init(HINSTANCE hInstance, int width, int height, LPCWSTR name);
-		// ゲームループ
-		void Run();
-	private:
+		HRESULT Init(HWND hWnd, int width, int height);;
+		
+
 		void Update();
 		void Render();
+	private:
+		std::vector<GameObject> m_gameObjects;
 
-		engin::Window* m_pWindow = NULL;
-		engin::Graphics* m_pGraphics = NULL;
-
-		// 共有のリソースとしてMeshを持つ
-		engin::Mesh* m_pTriangleMesh = NULL;
-
-		std::vector<GameObject> m_GameObjects;
+		engin::Graphics* m_pGraphics = nullptr;
+		engin::Mesh* m_pTriangleMesh = nullptr;
+		int m_screenWidth = 0;
+		int m_screenHeight = 0;
 	};
 }
