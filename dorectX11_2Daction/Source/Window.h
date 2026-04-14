@@ -1,7 +1,7 @@
 #pragma once
 #include <windows.h>
 
-namespace engin
+namespace engine
 {
 	//’è”’è‹`
 #define WINDOW_WIDTH 640
