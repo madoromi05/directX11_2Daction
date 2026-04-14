@@ -6,7 +6,7 @@
 
 using namespace DirectX;
 
-namespace engin
+namespace engine
 {
 	struct SimpleVertex
 	{

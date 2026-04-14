@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-namespace engin
+namespace engine
 {
 	Mesh::Mesh() {}
 

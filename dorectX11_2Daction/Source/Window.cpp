@@ -1,6 +1,6 @@
 #include "Window.h"
 
-namespace engin
+namespace engine
 {
 	//グローバル変数 (Windowクラスのインスタンス参照用)
 	Window* g_pWindow = NULL;

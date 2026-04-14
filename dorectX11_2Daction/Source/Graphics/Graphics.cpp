@@ -3,7 +3,7 @@
 
 #pragma comment(lib, "shlwapi.lib")
 
-namespace engin
+namespace engine
 {
 	Graphics::Graphics()
 	{

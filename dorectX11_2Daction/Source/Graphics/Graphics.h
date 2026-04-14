@@ -12,7 +12,7 @@
 
 using namespace DirectX;
 
-namespace engin
+namespace engine
 {
 	// 頂点フォーマットはエンジン側で定義
 	//struct SimpleVertex
