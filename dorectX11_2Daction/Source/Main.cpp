@@ -6,10 +6,10 @@ game::Game* g_pGame = NULL;
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, INT nCmdShow)
 {
-    engin::Window window;
+    engine::Window window;
     if (FAILED(window.InitWindow(hInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, APP_NAME)))
     {
-        MessageBox(NULL, L"ƒEƒBƒ“ƒhƒE‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½", L"ƒGƒ‰[", MB_OK);
+        MessageBox(NULL, L"ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸ", L"ã‚¨ãƒ©ãƒ¼", MB_OK);
         return 0;
     }
     
@@ -19,19 +19,19 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     {
         if (FAILED(g_pGame->Init(window.GetHWND(), WINDOW_WIDTH, WINDOW_HEIGHT)))
         {
-            MessageBox(NULL, L"ƒQ[ƒ€‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½", L"ƒGƒ‰[", MB_OK);
+            MessageBox(NULL, L"ã‚²ãƒ¼ãƒ ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸ", L"ã‚¨ãƒ©ãƒ¼", MB_OK);
             delete g_pGame;
             return 0;
         }
 
-        // ƒQ[ƒ€ƒ‹[ƒvŠJn
+        // ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—é–‹å§‹
         while (window.ProcessMessage())
         {
             g_pGame->Update();
             g_pGame->Render();
         }
 
-        // I—¹ˆ—
+        // çµ‚äº†å‡¦ç†
         delete g_pGame;
     }
 

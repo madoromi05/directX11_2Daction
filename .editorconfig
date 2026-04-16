@@ -1,0 +1,8 @@
+# .editorconfig
+root = true
+
+[*]
+charset = utf-8          # BOMなしUTF-8
+end_of_line = crlf       # 必要に応じて lf に変更
+indent_style = space
+indent_size = 4

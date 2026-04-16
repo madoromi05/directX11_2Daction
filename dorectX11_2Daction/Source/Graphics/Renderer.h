@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <d3d11.h>
 
 // DirectX11の初期化と毎フレームの描画管理を担う。

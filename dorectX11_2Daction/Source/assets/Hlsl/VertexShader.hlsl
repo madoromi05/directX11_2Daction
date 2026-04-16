@@ -1,4 +1,4 @@
-﻿cbuffer global : register(b0)
+cbuffer global : register(b0)
 {
     matrix g_mWVP;
     float4 g_PolyColor;
