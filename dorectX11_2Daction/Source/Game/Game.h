@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Window.h"
 #include "../Graphics/Graphics.h"
 #include "../Graphics/GameObject.h"
@@ -14,7 +14,7 @@ namespace game
 		Game();
 		~Game();
 
-		// ƒQ[ƒ€‰Šú‰»
+		// ã‚²ãƒ¼ãƒ åˆæœŸåŒ–
 		HRESULT Init(HWND hWnd, int width, int height);;
 		
 
@@ -23,8 +23,8 @@ namespace game
 	private:
 		std::vector<GameObject> m_gameObjects;
 
-		engin::Graphics* m_pGraphics = nullptr;
-		engin::Mesh* m_pTriangleMesh = nullptr;
+		engine::Graphics* m_pGraphics = nullptr;
+		engine::Mesh* m_pTriangleMesh = nullptr;
 		int m_screenWidth = 0;
 		int m_screenHeight = 0;
 	};

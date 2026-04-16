@@ -23,7 +23,9 @@
     <ClCompile Include="Source\Graphics\GameObject.cpp" />
     <ClCompile Include="Source\Graphics\Graphics.cpp" />
     <ClCompile Include="Source\Graphics\Mesh.cpp" />
-    <ClCompile Include="Source\Renderer.cpp" />
+    <ClCompile Include="Source\Graphics\PixelShader.cpp" />
+    <ClCompile Include="Source\Graphics\Renderer.cpp" />
+    <ClCompile Include="Source\Graphics\VertexShader.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Window.cpp" />
   </ItemGroup>
@@ -32,7 +34,10 @@
     <ClInclude Include="Source\Graphics\GameObject.h" />
     <ClInclude Include="Source\Graphics\Graphics.h" />
     <ClInclude Include="Source\Graphics\Mesh.h" />
-    <ClInclude Include="Source\Renderer.h" />
+    <ClInclude Include="Source\Graphics\PixelShader.h" />
+    <ClInclude Include="Source\Graphics\Renderer.h" />
+    <ClInclude Include="Source\Graphics\SimpleVertex.h" />
+    <ClInclude Include="Source\Graphics\VertexShader.h" />
     <ClInclude Include="Source\Window.h" />
   </ItemGroup>
   <ItemGroup>
