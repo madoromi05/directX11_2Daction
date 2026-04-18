@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 #include "Game/Game.h"
 #include "Window.h"
 

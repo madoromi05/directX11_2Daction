@@ -1,4 +1,5 @@
-﻿ #include "Game.h"
+﻿#include "Game.h"
+#include "Debug.h"
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
 
@@ -18,8 +19,16 @@ namespace game
 		m_screenHeight = height;
 
 		m_pGraphics = new engine::Graphics();
-		if (FAILED(m_pGraphics->InitD3D(hWnd, width, height))) return E_FAIL;
-		if (FAILED(m_pGraphics->InitPipeline())) return E_FAIL;
+        if (FAILED( m_pGraphics->InitD3D( hWnd, width, height ) ))
+        {
+            DEBUG_LOG_ERROR( "D3D の初期化に失敗しました" );
+            return E_FAIL;
+        }
+        if (FAILED( m_pGraphics->InitPipeline() ))
+        {
+            DEBUG_LOG_ERROR( "パイプラインの初期化に失敗しました" );
+            return E_FAIL;
+        }
 
 		m_pTriangleMesh = new engine::Mesh();
 		engine::SimpleVertex vertices[] = {
@@ -27,12 +36,15 @@ namespace game
 			XMFLOAT3(0.5f, -0.5f, 0.0f),
 			XMFLOAT3(-0.5f, -0.5f, 0.0f),
 		};
-		// Device取得もゲッター経由で
-		if (FAILED(m_pTriangleMesh->Init(m_pGraphics->GetDevice(), vertices, 3))) return E_FAIL;
+        if (FAILED( m_pTriangleMesh->Init( m_pGraphics->GetDevice(), vertices, 3 ) ))
+        {
+            DEBUG_LOG_ERROR( "Mesh の初期化に失敗しました" );
+            return E_FAIL;
+        }
 
-		// ゲームオブジェクト初期化
-		m_gameObjects.resize(MAX_MODEL);
-		for (int i = 0; i < MAX_MODEL; i++)
+
+		m_gameObjects.resize( kMaxModel );
+		for (int i = 0; i < kMaxModel; i++)
 		{
 			// ランダム位置
 			float x = float(rand()) / 1000.0f - 16.0f;
@@ -45,10 +57,9 @@ namespace game
 			float g = float(rand()) / 32767.0f;
 			float b = float(rand()) / 32767.0f;
 			m_gameObjects[i].SetColor(XMFLOAT4(r, g, b, 1.0f));
-
-			// 初期回転もランダムにするならここで SetRotation
 		}
 
+        DEBUG_LOG( "初期化完了" );
 		return S_OK;
 	}
 

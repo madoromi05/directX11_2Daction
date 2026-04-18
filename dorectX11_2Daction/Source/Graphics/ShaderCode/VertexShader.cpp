@@ -1,5 +1,6 @@
 ﻿#include "VertexShader.h"
 #include "SimpleVertex.h"
+#include "Debug.h"
 #include <d3dcompiler.h>
 
 #pragma comment(lib, "d3dcompiler.lib")
@@ -33,12 +34,17 @@ namespace engine
             &pErrBlob
         );
 
-        if (FAILED(hr))
+        if (FAILED( hr ))
         {
             if (pErrBlob)
             {
-                OutputDebugStringA((char*)pErrBlob->GetBufferPointer());
+                DEBUG_LOG_ERROR( "HLSLコンパイル失敗: "
+                    + std::string( ( char* ) pErrBlob->GetBufferPointer() ) );
                 pErrBlob->Release();
+            }
+            else
+            {
+                DEBUG_LOG_ERROR( "HLSLコンパイル失敗 (詳細なし)" );
             }
             return hr;
         }
@@ -66,8 +72,13 @@ namespace engine
             pBlob->GetBufferSize(),
             &m_pInputLayout
         );
-        pBlob->Release();
-
+        
+        if (FAILED( hr ))
+        {
+            DEBUG_LOG_ERROR( "InputLayout の生成に失敗しました" );
+            pBlob->Release();
+            return hr;
+        }
         return hr;
     }
 

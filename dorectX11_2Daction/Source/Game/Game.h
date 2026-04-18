@@ -4,7 +4,7 @@
 #include "../Graphics/GameObject.h"
 #include <vector>
 
-#define MAX_MODEL 50
+constexpr int kMaxModel = 50;
 
 namespace game
 {
