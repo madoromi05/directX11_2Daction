@@ -41,7 +41,7 @@ namespace engine
             if (SUCCEEDED( pContext->Map( m_pBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped)))
             {
                 memcpy( mapped.pData, &data, sizeof( T ) );
-                pContext->Unmap( m_pBuffer, 0 );
+                pContext->Unmap( m_pBuffer.Get(), 0 );
             }
         }
 
@@ -49,8 +49,9 @@ namespace engine
         // slot : シェーダー側の register(bN) のNに対応する
         void Bind( ID3D11DeviceContext* pContext, UINT slot )
         {
-            pContext->VSSetConstantBuffers( slot, 1, &m_pBuffer.Get();
-            pContext->PSSetConstantBuffers( slot, 1, &m_pBuffer.Get();
+            ID3D11Buffer* buf = m_pBuffer.Get();
+            pContext->VSSetConstantBuffers( slot, 1, &buf );
+            pContext->PSSetConstantBuffers( slot, 1, &buf );
         }
 
     private:
