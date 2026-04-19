@@ -5,8 +5,6 @@
 #include <vector>
 #include <memory>
 
-constexpr int kMaxModel = 50;
-
 namespace game
 {
 	class Game
@@ -21,6 +19,7 @@ namespace game
 		void Update();
 		void Render();
 	private:
+        static constexpr int kMaxModel = 50;
 		std::vector<GameObject> m_gameObjects;
 
         std::unique_ptr<engine::Graphics> m_pGraphics;

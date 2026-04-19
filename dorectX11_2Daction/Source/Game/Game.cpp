@@ -45,7 +45,7 @@ namespace game
         std::uniform_real_distribution<float> distDepth( 10.0f, 42.0f );
         std::uniform_real_distribution<float> distColor( 0.0f, 1.0f );
 
-		m_gameObjects.resize( kMaxModel );
+        m_gameObjects.resize( kMaxModel );
 		for (int i = 0; i < kMaxModel; i++)
 		{
             float x = distPos( rng );

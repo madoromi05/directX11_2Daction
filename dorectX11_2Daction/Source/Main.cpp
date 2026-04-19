@@ -2,8 +2,6 @@
 #include "Game/Game.h"
 #include "Window.h"
 
-game::Game* g_pGame = NULL;
-
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, INT nCmdShow)
 {
     engine::Window window;
@@ -13,26 +11,17 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return 0;
     }
     
-    g_pGame = new game::Game();
-
-    if (g_pGame != NULL)
+    auto pGame = std::make_unique<game::Game>();
+    if (FAILED(pGame->Init(window.GetHWND(), WINDOW_WIDTH, WINDOW_HEIGHT)))
     {
-        if (FAILED(g_pGame->Init(window.GetHWND(), WINDOW_WIDTH, WINDOW_HEIGHT)))
-        {
-            MessageBox(NULL, L"ゲームの初期化に失敗しました", L"エラー", MB_OK);
-            delete g_pGame;
-            return 0;
-        }
+        MessageBox(NULL, L"ゲームの初期化に失敗しました", L"エラー", MB_OK);
+        return 0;
+    }
 
-        // ゲームループ開始
-        while (window.ProcessMessage())
-        {
-            g_pGame->Update();
-            g_pGame->Render();
-        }
-
-        // 終了処理
-        delete g_pGame;
+    while (window.ProcessMessage())
+    {
+        pGame->Update();
+        pGame->Render();
     }
 
     return 0;

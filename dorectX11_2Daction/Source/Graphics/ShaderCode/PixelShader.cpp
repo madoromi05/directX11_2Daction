@@ -8,8 +8,8 @@ namespace engine
 {
     HRESULT PixelShader::Init(ID3D11Device* pDevice, const wchar_t* hlslPath)
     {
-        ID3DBlob* pBlob = nullptr;
-        ID3DBlob* pErrBlob = nullptr;
+        Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+        Microsoft::WRL::ComPtr<ID3DBlob> pErrBlob;
 
         HRESULT hr = D3DCompileFromFile(
             hlslPath,
@@ -28,7 +28,6 @@ namespace engine
             {
                 DEBUG_LOG_ERROR( "HLSLコンパイル失敗: "
                     + std::string( ( char* ) pErrBlob->GetBufferPointer() ) );
-                pErrBlob->Release();
             }
             else
             {
@@ -41,12 +40,12 @@ namespace engine
             pBlob->GetBufferPointer(),
             pBlob->GetBufferSize(),
             nullptr,
-            &m_pPixelShader
+            m_pPixelShader.GetAddressOf()
         );
+
         if (FAILED( hr ))
         {
             DEBUG_LOG_ERROR( "Pixelhader の生成に失敗しました" );
-            pBlob->Release();
             return hr;
         }
 
