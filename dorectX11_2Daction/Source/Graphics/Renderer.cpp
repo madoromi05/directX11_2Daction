@@ -2,25 +2,6 @@
 #pragma comment(lib, "d3d11.lib")
 
 namespace engine {
-	Renderer::Renderer()
-        : m_pDevice( nullptr )
-        , m_pSwapChain( nullptr )
-        , m_pContext( nullptr )
-        , m_pRenderTargetView( nullptr )
-        , m_pDepthStencilView( nullptr )
-        , m_pDepthStencilBuffer( nullptr )
-	{}
-
-    Renderer::~Renderer()
-    {
-        if (m_pDepthStencilView)   m_pDepthStencilView->Release();
-        if (m_pDepthStencilBuffer) m_pDepthStencilBuffer->Release();
-        if (m_pRenderTargetView)   m_pRenderTargetView->Release();
-        if (m_pSwapChain)          m_pSwapChain->Release();
-        if (m_pContext)            m_pContext->Release();
-        if (m_pDevice)             m_pDevice->Release();
-    }
-
     HRESULT Renderer::Init( HWND hwnd, int width, int height ) {
         // スワップチェーンの設定
         DXGI_SWAP_CHAIN_DESC sd;
@@ -48,20 +29,21 @@ namespace engine {
             0,
             D3D11_SDK_VERSION,
             &sd,
-            &m_pSwapChain,
-            &m_pDevice,
+            m_pSwapChain.GetAddressOf(),
+            m_pDevice.GetAddressOf(),
             &featureLevel,
-            &m_pContext
+            m_pContext.GetAddressOf()
         );
         if (FAILED( hr )) return hr;
 
         // バックバッファからレンダーターゲットビューを作成する
-        ID3D11Texture2D* pBackBuffer = nullptr;
-        hr = m_pSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), ( void** ) &pBackBuffer );
+        Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer;
+        hr = m_pSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ),
+            reinterpret_cast< void** >( pBackBuffer.GetAddressOf() ) );
         if (FAILED( hr )) return hr;
 
-        hr = m_pDevice->CreateRenderTargetView( pBackBuffer, nullptr, &m_pRenderTargetView );
-        pBackBuffer->Release();
+        hr = m_pDevice->CreateRenderTargetView(
+            pBackBuffer.Get(), nullptr, m_pRenderTargetView.GetAddressOf() );
         if (FAILED( hr )) return hr;
 
         // 深度ステンシルバッファの設定
@@ -77,14 +59,17 @@ namespace engine {
         depthDesc.Usage = D3D11_USAGE_DEFAULT;
         depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
-        hr = m_pDevice->CreateTexture2D( &depthDesc, nullptr, &m_pDepthStencilBuffer );
+        hr = m_pDevice->CreateTexture2D(
+            &depthDesc, nullptr, m_pDepthStencilBuffer.GetAddressOf() );
         if (FAILED( hr )) return hr;
 
-        hr = m_pDevice->CreateDepthStencilView( m_pDepthStencilBuffer, nullptr, &m_pDepthStencilView );
+        hr = m_pDevice->CreateDepthStencilView(
+            m_pDepthStencilBuffer.Get(), nullptr, m_pDepthStencilView.GetAddressOf() );
         if (FAILED( hr )) return hr;
 
         // レンダーターゲットと深度ステンシルをパイプラインにセットする
-        m_pContext->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
+        ID3D11RenderTargetView* pRTV = m_pRenderTargetView.Get();
+        m_pContext->OMSetRenderTargets( 1, &pRTV, m_pDepthStencilView.Get() );
 
         // ビューポートの設定
         D3D11_VIEWPORT vp;
@@ -101,8 +86,8 @@ namespace engine {
     void Renderer::BeginFrame( float r, float g, float b, float a )
     {
         float clearColor[4] = {r, g, b, a};
-        m_pContext->ClearRenderTargetView( m_pRenderTargetView, clearColor );
-        m_pContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
+        m_pContext->ClearRenderTargetView( m_pRenderTargetView.Get(), clearColor );
+        m_pContext->ClearDepthStencilView( m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
     }
 
     void Renderer::EndFrame()
@@ -112,11 +97,11 @@ namespace engine {
 
     ID3D11Device* Renderer::GetDevice() const
     {
-        return m_pDevice;
+        return m_pDevice.Get();
     }
 
     ID3D11DeviceContext* Renderer::GetContext() const
     {
-        return m_pContext;
+        return m_pContext.Get();
     }
 }

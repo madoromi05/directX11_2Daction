@@ -7,21 +7,10 @@
 
 namespace engine
 {
-    VertexShader::VertexShader()
-        : m_pVertexShader(nullptr)
-        , m_pInputLayout(nullptr)
-    {}
-
-    VertexShader::~VertexShader()
-    {
-        if (m_pInputLayout)  m_pInputLayout->Release();
-        if (m_pVertexShader) m_pVertexShader->Release();
-    }
-
     HRESULT VertexShader::Init(ID3D11Device* pDevice, const wchar_t* hlslPath)
     {
-        ID3DBlob* pBlob = nullptr;
-        ID3DBlob* pErrBlob = nullptr;
+        Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+        Microsoft::WRL::ComPtr<ID3DBlob> pErrBlob;
 
         HRESULT hr = D3DCompileFromFile(
             hlslPath,
@@ -55,7 +44,8 @@ namespace engine
             nullptr,
             &m_pVertexShader
         );
-        if (FAILED(hr)) { pBlob->Release(); return hr; }
+        
+        if (FAILED( hr )) return hr;
 
         // SimpleVertexの構成に合わせた入力レイアウト定義
         D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -76,7 +66,6 @@ namespace engine
         if (FAILED( hr ))
         {
             DEBUG_LOG_ERROR( "InputLayout の生成に失敗しました" );
-            pBlob->Release();
             return hr;
         }
         return hr;
@@ -84,8 +73,8 @@ namespace engine
 
     void VertexShader::Bind(ID3D11DeviceContext* pContext)
     {
-        pContext->VSSetShader(m_pVertexShader, nullptr, 0);
-        pContext->IASetInputLayout(m_pInputLayout);
+        pContext->VSSetShader(m_pVertexShader.Get(), nullptr, 0);
+        pContext->IASetInputLayout(m_pInputLayout.Get() );
         pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     }
 }

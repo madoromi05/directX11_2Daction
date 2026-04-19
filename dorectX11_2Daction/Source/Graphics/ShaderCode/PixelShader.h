@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <d3d11.h>
+#include <wrl/client.h>
 
 namespace engine
 {
@@ -8,15 +9,14 @@ namespace engine
     class PixelShader
     {
     public:
-        PixelShader();
-        ~PixelShader();
+        PixelShader() = default;
+        ~PixelShader() = default;
 
         HRESULT Init(ID3D11Device* pDevice, const wchar_t* hlslPath);
 
         void Bind(ID3D11DeviceContext* pContext);
 
     private:
-        ID3D11PixelShader* m_pPixelShader;
+        Microsoft::WRL::ComPtr<ID3D11PixelShader> m_pPixelShader;
     };
-
 }

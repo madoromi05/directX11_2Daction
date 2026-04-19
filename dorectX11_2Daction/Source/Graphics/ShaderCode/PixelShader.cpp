@@ -6,15 +6,6 @@
 
 namespace engine
 {
-    PixelShader::PixelShader()
-        : m_pPixelShader(nullptr)
-    {}
-
-    PixelShader::~PixelShader()
-    {
-        if (m_pPixelShader) m_pPixelShader->Release();
-    }
-
     HRESULT PixelShader::Init(ID3D11Device* pDevice, const wchar_t* hlslPath)
     {
         ID3DBlob* pBlob = nullptr;
@@ -64,6 +55,6 @@ namespace engine
 
     void PixelShader::Bind(ID3D11DeviceContext* pContext)
     {
-        pContext->PSSetShader(m_pPixelShader, nullptr, 0);
+        pContext->PSSetShader(m_pPixelShader.Get(), nullptr, 0);
     }
 }

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <d3d11.h>
+#include <wrl/client.h>
 
 namespace engine
 {
@@ -8,15 +9,14 @@ namespace engine
     class VertexShader
     {
     public:
-        VertexShader();
-        ~VertexShader();
+        VertexShader() = default;
+        ~VertexShader() = default;
 
-        HRESULT Init(ID3D11Device* pDevice, const wchar_t* hlslPath);
-
-        void Bind(ID3D11DeviceContext* pContext);
+        HRESULT Init( ID3D11Device* pDevice, const wchar_t* hlslPath );
+        void Bind( ID3D11DeviceContext* pContext );
 
     private:
-        ID3D11VertexShader* m_pVertexShader;
-        ID3D11InputLayout* m_pInputLayout;
+        Microsoft::WRL::ComPtr<ID3D11VertexShader> m_pVertexShader;
+        Microsoft::WRL::ComPtr<ID3D11InputLayout>  m_pInputLayout;
     };
 }

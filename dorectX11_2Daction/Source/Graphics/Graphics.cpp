@@ -16,11 +16,6 @@ namespace engine
 
     HRESULT Graphics::InitPipeline()
     {
-        // 実行時のカレントディレクトリを出力して、パスのズレを確認する
-        char currentDir[MAX_PATH];
-        GetCurrentDirectoryA( MAX_PATH, currentDir );
-        DEBUG_LOG( "Graphics::InitPipeline - カレントディレクトリ: " + std::string( currentDir ) );
-
         ID3D11Device* pDevice = m_renderer.GetDevice();
 
         if (FAILED( m_vertexShader.Init( pDevice, L"Source/assets/Hlsl/VertexShader.hlsl" ) ))

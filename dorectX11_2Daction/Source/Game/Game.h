@@ -3,6 +3,7 @@
 #include "../Graphics/Graphics.h"
 #include "../Graphics/GameObject.h"
 #include <vector>
+#include <memory>
 
 constexpr int kMaxModel = 50;
 
@@ -16,15 +17,14 @@ namespace game
 
 		// ゲーム初期化
 		HRESULT Init(HWND hWnd, int width, int height);;
-		
 
 		void Update();
 		void Render();
 	private:
 		std::vector<GameObject> m_gameObjects;
 
-		engine::Graphics* m_pGraphics = nullptr;
-		engine::Mesh* m_pTriangleMesh = nullptr;
+        std::unique_ptr<engine::Graphics> m_pGraphics;
+        std::unique_ptr<engine::Mesh>     m_pTriangleMesh;
 		int m_screenWidth = 0;
 		int m_screenHeight = 0;
 	};
