@@ -24,6 +24,7 @@ namespace engine
         void ClearMeshes();
 
         DirectX::XMFLOAT3 GetPos() const;
+        DirectX::XMFLOAT3 GetRotation() const;
         DirectX::XMFLOAT4 GetColor() const;
         DirectX::XMMATRIX GetWorldMatrix() const;
         const std::vector<Mesh*>& GetMeshes()      const;

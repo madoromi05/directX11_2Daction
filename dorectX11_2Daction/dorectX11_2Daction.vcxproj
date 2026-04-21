@@ -36,6 +36,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Debug.h" />
     <ClInclude Include="Source\Game\Game.h" />
+    <ClInclude Include="Source\Graphics\FbxLoad\FbxModel.h" />
     <ClInclude Include="Source\Graphics\FbxLoad\ModelLoader.h" />
     <ClInclude Include="Source\Graphics\GameObject.h" />
     <ClInclude Include="Source\Graphics\Graphics.h" />

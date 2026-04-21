@@ -18,6 +18,7 @@ namespace engine
     void GameObject::SetColor( DirectX::XMFLOAT4 color ) { m_color = color; }
 
     DirectX::XMFLOAT3 GameObject::GetPos()   const { return m_pos; }
+    DirectX::XMFLOAT3 GameObject::GetRotation() const { return m_rot; }
     DirectX::XMFLOAT4 GameObject::GetColor() const { return m_color; }
     const std::vector<Mesh*>& GameObject::GetMeshes() const { return m_pMeshes; }
 
