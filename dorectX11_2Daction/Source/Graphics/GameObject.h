@@ -1,33 +1,31 @@
-#pragma once
+ï»¿#pragma once
 #include <DirectXMath.h>
 
 using namespace DirectX;
 
-namespace game
+namespace engine
 {
 	class GameObject
 	{
 	public:
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 		GameObject();
-		virtual ~GameObject() {}
+        virtual ~GameObject() = default;
+        
+        void SetPos( DirectX::XMFLOAT3 pos );
+        void SetRotation( DirectX::XMFLOAT3 rot );
+        void SetScale( DirectX::XMFLOAT3 scale );
+        void SetColor( DirectX::XMFLOAT4 color );
 
-		// XVˆ—iˆÚ“®ƒƒWƒbƒN‚Í‚±‚±‚Öj
-		void Update();
+        virtual void Update() {}
 
-		// ‰Šú‰»—pƒZƒbƒ^[
-		void SetPos(XMFLOAT3 pos);
-		void SetColor(XMFLOAT4 color);
-		void SetRotation(XMFLOAT3 rot);
-
-		// •`‰æ—pƒQƒbƒ^[
-		XMFLOAT3 GetPos() const;
-		XMFLOAT4 GetColor() const;
-		XMMATRIX GetWorldMatrix() const;
+        DirectX::XMFLOAT3 GetPos() const;
+        DirectX::XMFLOAT4 GetColor() const;
+        DirectX::XMMATRIX GetWorldMatrix() const;
 
 	private:
-		XMFLOAT3 m_Pos;   // ˆÊ’u
-		XMFLOAT3 m_Rot;   // ‰ñ“]
-		XMFLOAT4 m_Color; // F
+        DirectX::XMFLOAT3 m_pos;
+        DirectX::XMFLOAT3 m_rot;
+        DirectX::XMFLOAT3 m_scale;
+        DirectX::XMFLOAT4 m_color;
 	};
 }

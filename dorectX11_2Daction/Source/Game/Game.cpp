@@ -34,7 +34,9 @@ namespace game
             { XMFLOAT3( 0.5f, -0.5f, 0.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
             { XMFLOAT3( -0.5f, -0.5f, 0.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
         };
-        if (FAILED( m_pTriangleMesh->Init( m_pGraphics->GetDevice(), vertices, 3 ) ))
+        UINT indices[] = {0, 1, 2};
+
+        if (FAILED( m_pTriangleMesh->Init( m_pGraphics->GetDevice(), vertices, 3, indices, 3 ) ))
         {
             DEBUG_LOG_ERROR( "Mesh の初期化に失敗しました" );
             return E_FAIL;
@@ -45,7 +47,7 @@ namespace game
         std::uniform_real_distribution<float> distDepth( 10.0f, 42.0f );
         std::uniform_real_distribution<float> distColor( 0.0f, 1.0f );
 
-        m_gameObjects.resize( kMaxModel );
+		m_gameObjects.resize( kMaxModel );
 		for (int i = 0; i < kMaxModel; i++)
 		{
             float x = distPos( rng );

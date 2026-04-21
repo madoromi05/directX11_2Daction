@@ -1,32 +1,28 @@
-#include "GameObject.h"
+Ôªø#include "GameObject.h"
 
-namespace game
+namespace engine
 {
 	GameObject::GameObject()
-		: m_Pos(0.0f, 0.0f, 0.0f)
-		, m_Rot(0.0f, 0.0f, 0.0f) // èâä˙âª
-		, m_Color(1.0f, 1.0f, 1.0f, 1.0f)
+        : m_pos( 0.0f, 0.0f, 0.0f )
+        , m_rot( 0.0f, 0.0f, 0.0f )
+        , m_scale( 1.0f, 1.0f, 1.0f )
+        , m_color( 1.0f, 1.0f, 1.0f, 1.0f )
 	{}
 
-	void GameObject::Update()
-	{
-		m_Rot.y += 0.002f;
-	}
+    void GameObject::SetPos( DirectX::XMFLOAT3 pos ) { m_pos = pos; }
+    void GameObject::SetRotation( DirectX::XMFLOAT3 rot ) { m_rot = rot; }
+    void GameObject::SetScale( DirectX::XMFLOAT3 scale ) { m_scale = scale; }
+    void GameObject::SetColor( DirectX::XMFLOAT4 color ) { m_color = color; }
 
-	void GameObject::SetPos(XMFLOAT3 pos) { m_Pos = pos; }
-	void GameObject::SetColor(XMFLOAT4 color) { m_Color = color; }
-	void GameObject::SetRotation(XMFLOAT3 rot) { m_Rot = rot; }
+    DirectX::XMFLOAT3 GameObject::GetPos()   const { return m_pos; }
+    DirectX::XMFLOAT4 GameObject::GetColor() const { return m_color; }
 
-	XMFLOAT3 GameObject::GetPos() const { return m_Pos; }
-	XMFLOAT4 GameObject::GetColor() const { return m_Color; }
+    DirectX::XMMATRIX GameObject::GetWorldMatrix() const
+    {
+        DirectX::XMMATRIX S = DirectX::XMMatrixScaling( m_scale.x, m_scale.y, m_scale.z );
+        DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw( m_rot.x, m_rot.y, m_rot.z );
+        DirectX::XMMATRIX T = DirectX::XMMatrixTranslation( m_pos.x, m_pos.y, m_pos.z );
 
-	XMMATRIX GameObject::GetWorldMatrix() const
-	{
-		XMMATRIX S = XMMatrixScaling(1.0f, 1.0f, 1.0f);
-		XMMATRIX R = XMMatrixRotationRollPitchYaw(m_Rot.x, m_Rot.y, m_Rot.z);
-		XMMATRIX T = XMMatrixTranslation(m_Pos.x, m_Pos.y, m_Pos.z);
-
-		// çsóÒÇÃä|ÇØçáÇÌÇπ (Scale * Rotate * Translate)
-		return S * R * T;
-	}
+        return S * R * T;
+    }
 }

@@ -13,14 +13,13 @@ namespace game
 		Game();
 		~Game();
 
-		// ゲーム初期化
 		HRESULT Init(HWND hWnd, int width, int height);;
 
 		void Update();
 		void Render();
 	private:
         static constexpr int kMaxModel = 50;
-		std::vector<GameObject> m_gameObjects;
+		std::vector<engine::GameObject> m_gameObjects;
 
         std::unique_ptr<engine::Graphics> m_pGraphics;
         std::unique_ptr<engine::Mesh>     m_pTriangleMesh;
