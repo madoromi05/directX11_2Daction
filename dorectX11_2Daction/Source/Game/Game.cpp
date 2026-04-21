@@ -1,5 +1,6 @@
 ﻿#include "Game.h"
 #include "Debug.h"
+#include "Graphics/FbxLoad/ModelLoader.h"
 #include <random>
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
@@ -7,7 +8,6 @@
 namespace game
 {
     Game::Game() {};
-
     Game::~Game() = default;
 
 	HRESULT Game::Init(HWND hWnd, int width, int height)
@@ -27,21 +27,35 @@ namespace game
             return E_FAIL;
         }
 
-        m_pTriangleMesh = std::make_unique<engine::Mesh>();
-        engine::SimpleVertex vertices[] =
-        {
-            { XMFLOAT3( 0.0f,  0.5f, 0.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ), XMFLOAT2( 0.5f, 0.0f ) },
-            { XMFLOAT3( 0.5f, -0.5f, 0.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-            { XMFLOAT3( -0.5f, -0.5f, 0.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
-        };
-        UINT indices[] = {0, 1, 2};
+        // 簡単なメッシュのロード
+        //engine::SimpleVertex vertices[] =
+        //{
+        //    { XMFLOAT3( 0.0f,  0.5f, 0.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ), XMFLOAT2( 0.5f, 0.0f ) },
+        //    { XMFLOAT3( 0.5f, -0.5f, 0.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
+        //    { XMFLOAT3( -0.5f, -0.5f, 0.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+        //};
+        //UINT indices[] = {0, 1, 2};
 
-        if (FAILED( m_pTriangleMesh->Init( m_pGraphics->GetDevice(), vertices, 3, indices, 3 ) ))
+        //if (FAILED( m_pTriangleMesh->Init( m_pGraphics->GetDevice(), vertices, 3, indices, 3 ) ))
+        //{
+        //    DEBUG_LOG_ERROR( "Mesh の初期化に失敗しました" );
+        //    return E_FAIL;
+        //}
+        //m_pTriangleMesh = std::make_unique<engine::Mesh>();
+
+        // FBXモデルのロード
+        engine::ModelLoader loader;
+        auto loadedMeshes = loader.Load( m_pGraphics->GetDevice(), "Source/assets/Models/cube.fbx" );
+        if (loadedMeshes.empty())
         {
-            DEBUG_LOG_ERROR( "Mesh の初期化に失敗しました" );
+            DEBUG_LOG_ERROR( "モデルのロードに失敗しました" );
             return E_FAIL;
         }
-
+        for (auto& pMesh : loadedMeshes)
+        {
+            m_pMeshes.push_back( std::move( pMesh ) );
+        }
+        // GameObjectの初期化
         std::mt19937 rng( std::random_device {}( ) );
         std::uniform_real_distribution<float> distPos( -16.0f, 16.0f );
         std::uniform_real_distribution<float> distDepth( 10.0f, 42.0f );
@@ -58,6 +72,11 @@ namespace game
             float b = distColor( rng );
             m_gameObjects[i].SetPos( XMFLOAT3( x, y, z ) );
             m_gameObjects[i].SetColor( XMFLOAT4( r, g, b, 1.0f ) );
+
+            for (const auto& pMesh : m_pMeshes)
+            {
+                m_gameObjects[i].AddMesh( pMesh.get() );
+            }
 		}
 
         DEBUG_LOG( "初期化完了" );
@@ -82,13 +101,16 @@ namespace game
 			XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)   // Up
 		);
 		// プロジェクション設定
-		float aspect = (float)m_screenWidth / (float)m_screenHeight; 
-		m_pGraphics->SetProjection(XM_PI / 4.0f, aspect, 0.1f, 100.0f);
+        float aspect = static_cast< float >( m_screenWidth ) / static_cast< float >( m_screenHeight );
+        m_pGraphics->SetProjection( DirectX::XM_PI / 4.0f, aspect, 0.1f, 100.0f );
 
 		for (const auto& obj : m_gameObjects)
 		{
 			XMMATRIX mWorld = obj.GetWorldMatrix();
-            m_pGraphics->Draw( m_pTriangleMesh.get(), mWorld, obj.GetColor() );
+            for (engine::Mesh* pMesh : obj.GetMeshes())
+            {
+                m_pGraphics->Draw( pMesh, mWorld, obj.GetColor() );
+            }
 		}
 
 		m_pGraphics->EndRender();

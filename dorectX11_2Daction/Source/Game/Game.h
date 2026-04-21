@@ -19,10 +19,10 @@ namespace game
 		void Render();
 	private:
         static constexpr int kMaxModel = 50;
-		std::vector<engine::GameObject> m_gameObjects;
-
-        std::unique_ptr<engine::Graphics> m_pGraphics;
-        std::unique_ptr<engine::Mesh>     m_pTriangleMesh;
+		std::vector<engine::GameObject>     m_gameObjects;
+        std::unique_ptr<engine::Graphics>   m_pGraphics;
+        std::unique_ptr<engine::Mesh>       m_pTriangleMesh;
+        std::vector<std::unique_ptr<engine::Mesh>>   m_pMeshes;
 		int m_screenWidth = 0;
 		int m_screenHeight = 0;
 	};

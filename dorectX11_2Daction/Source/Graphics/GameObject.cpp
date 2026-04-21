@@ -9,6 +9,9 @@ namespace engine
         , m_color( 1.0f, 1.0f, 1.0f, 1.0f )
 	{}
 
+    void GameObject::AddMesh( Mesh* pMesh ) { if (pMesh) m_pMeshes.push_back( pMesh ); }
+    void GameObject::ClearMeshes() { m_pMeshes.clear(); }
+
     void GameObject::SetPos( DirectX::XMFLOAT3 pos ) { m_pos = pos; }
     void GameObject::SetRotation( DirectX::XMFLOAT3 rot ) { m_rot = rot; }
     void GameObject::SetScale( DirectX::XMFLOAT3 scale ) { m_scale = scale; }
@@ -16,6 +19,7 @@ namespace engine
 
     DirectX::XMFLOAT3 GameObject::GetPos()   const { return m_pos; }
     DirectX::XMFLOAT4 GameObject::GetColor() const { return m_color; }
+    const std::vector<Mesh*>& GameObject::GetMeshes() const { return m_pMeshes; }
 
     DirectX::XMMATRIX GameObject::GetWorldMatrix() const
     {

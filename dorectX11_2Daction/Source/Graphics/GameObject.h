@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <DirectXMath.h>
+#include <vector>
+#include "Mesh.h"
 
 using namespace DirectX;
 
@@ -18,11 +20,16 @@ namespace engine
 
         virtual void Update() {}
 
+        void AddMesh( Mesh* pMesh );
+        void ClearMeshes();
+
         DirectX::XMFLOAT3 GetPos() const;
         DirectX::XMFLOAT4 GetColor() const;
         DirectX::XMMATRIX GetWorldMatrix() const;
+        const std::vector<Mesh*>& GetMeshes()      const;
 
 	private:
+        std::vector<Mesh*>    m_pMeshes;
         DirectX::XMFLOAT3 m_pos;
         DirectX::XMFLOAT3 m_rot;
         DirectX::XMFLOAT3 m_scale;
