@@ -78,6 +78,16 @@ namespace engine
         pMesh->Draw( pContext );
     }
 
+    void Graphics::Draw( const engine::FbxModel& model ) {
+        const auto& go = model.GetGameObject();
+        DirectX::XMMATRIX world = go.GetWorldMatrix();
+        DirectX::XMFLOAT4 color = go.GetColor();
+
+        for (Mesh* mesh : go.GetMeshes()) {
+            Draw( mesh, world, color );  // 既存のDraw()を再利用
+        }
+    }
+
     ID3D11Device* Graphics::GetDevice() const
     {
         return m_renderer.GetDevice();

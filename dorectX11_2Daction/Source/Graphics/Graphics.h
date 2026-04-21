@@ -5,6 +5,7 @@
 #include "ShaderCode/PixelShader.h"
 #include "ShaderCode/ConstantBuffer.h"
 #include "ShaderCode/SimpleShaderConstantBuffer.h"
+#include "Graphics/FbxLoad/FbxModel.h"
 #include <DirectXMath.h>
 
 using namespace DirectX;
@@ -36,7 +37,7 @@ namespace engine
 
 		// WVP合成 → 定数バッファ更新 → メッシュ描画を行う。
 		void Draw( Mesh* pMesh, CXMMATRIX world, const XMFLOAT4& color );
-
+        void Draw( const engine::FbxModel& model );
 		ID3D11Device* GetDevice() const;
 
 	private:
