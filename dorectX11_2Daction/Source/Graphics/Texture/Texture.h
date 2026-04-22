@@ -1,18 +1,11 @@
-#pragma once
+﻿#pragma once
+#include "SamplerType.h"
+#include <windows.h>
 #include <d3d11.h>
 #include <wrl/client.h>
 
 namespace engine
 {
-    // サンプラーの用途を示す。
-    // Wrap  : 地形など繰り返しテクスチャに使用する。
-    // Clamp : UIなど短時間表示のオブジェクトに使用する。
-    enum class SamplerType
-    {
-        Wrap,
-        Clamp,
-    };
-
     class Texture
     {
     public:

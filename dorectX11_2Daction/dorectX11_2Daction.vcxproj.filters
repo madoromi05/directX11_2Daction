@@ -98,6 +98,9 @@
     <ClInclude Include="Source\Graphics\FbxLoad\FbxModel.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Graphics\Texture\SamplerType.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Source\assets\Hlsl\VertexShader.hlsl">

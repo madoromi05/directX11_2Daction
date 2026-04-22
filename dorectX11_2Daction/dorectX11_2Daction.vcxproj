@@ -46,6 +46,7 @@
     <ClInclude Include="Source\Graphics\ShaderCode\SimpleShaderConstantBuffer.h" />
     <ClInclude Include="Source\Graphics\ShaderCode\SimpleVertex.h" />
     <ClInclude Include="Source\Graphics\ShaderCode\VertexShader.h" />
+    <ClInclude Include="Source\Graphics\Texture\SamplerType.h" />
     <ClInclude Include="Source\Graphics\Texture\Texture.h" />
     <ClInclude Include="Source\Window.h" />
   </ItemGroup>
