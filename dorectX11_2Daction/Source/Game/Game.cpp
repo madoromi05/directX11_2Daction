@@ -131,13 +131,11 @@ namespace game
 	
 	void Game::Render()
 	{
-        m_models[0].Rotate( 0.0f, 0.01f, 0.0f );
-        m_models[0].Move( 0.1f, 0.0f, 0.0f );
 		m_pGraphics->BeginRender();
 
 		// カメラ設定（回転などあればここで計算）
 		m_pGraphics->SetCamera(
-			XMVectorSet(0.0f, 1.0f, -2.0f, 0.0f), // Eye
+			XMVectorSet(0.0f, 0.0f, -2.0f, 0.0f), // Eye
 			XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),  // Focus
 			XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)   // Up
 		);
