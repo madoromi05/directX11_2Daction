@@ -19,11 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Debug.cpp" />
     <ClCompile Include="Source\Game\Game.cpp" />
-    <ClCompile Include="Source\Game\player\Player.cpp" />
+    <ClCompile Include="Source\Game\Player\Camera.cpp" />
     <ClCompile Include="Source\Graphics\FbxLoad\ModelLoader.cpp" />
-    <ClCompile Include="Source\Graphics\ShaderCode\ConstantBuffer.h" />
+    <ClInclude Include="Source\Graphics\ShaderCode\ConstantBuffer.h" />
     <ClCompile Include="Source\Graphics\GameObject.cpp" />
     <ClCompile Include="Source\Graphics\Graphics.cpp" />
     <ClCompile Include="Source\Graphics\Mesh.cpp" />
@@ -37,7 +36,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Debug.h" />
     <ClInclude Include="Source\Game\Game.h" />
-    <ClInclude Include="Source\Game\player\player.h" />
+    <ClInclude Include="Source\Game\Player\Camera.h" />
     <ClInclude Include="Source\Graphics\FbxLoad\FbxModel.h" />
     <ClInclude Include="Source\Graphics\FbxLoad\ModelLoader.h" />
     <ClInclude Include="Source\Graphics\GameObject.h" />

@@ -2,6 +2,7 @@
 #include "Window.h"
 #include "../Graphics/Graphics.h"
 #include "../Graphics/GameObject.h"
+#include "Game/Player/Camera.h"
 #include <vector>
 #include <memory>
 
@@ -36,5 +37,6 @@ namespace game
 		int m_screenWidth = 0;
 		int m_screenHeight = 0;
         DWORD m_lastTime = 0;
+        engine::Camera m_camera;
 	};
 }

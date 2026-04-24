@@ -127,6 +127,15 @@ namespace game
 
             obj.Update();
         }
+        const float camSpeed = 5.0f * deltaTime;
+        DirectX::XMFLOAT3 delta = { 0.0f, 0.0f, 0.0f };
+        if (GetAsyncKeyState('W') & 0x8000) delta.z += camSpeed;
+        if (GetAsyncKeyState('S') & 0x8000) delta.z -= camSpeed;
+        if (GetAsyncKeyState('A') & 0x8000) delta.x -= camSpeed;
+        if (GetAsyncKeyState('D') & 0x8000) delta.x += camSpeed;
+        if (GetAsyncKeyState('Q') & 0x8000) delta.y += camSpeed;
+        if (GetAsyncKeyState('E') & 0x8000) delta.y -= camSpeed;
+        m_camera.Move(delta);
     }
 	
 	void Game::Render()
@@ -134,14 +143,16 @@ namespace game
 		m_pGraphics->BeginRender();
 
 		// カメラ設定（回転などあればここで計算）
-		m_pGraphics->SetCamera(
-			XMVectorSet(0.0f, 0.0f, -2.0f, 0.0f), // Eye
-			XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),  // Focus
-			XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)   // Up
-		);
+		//m_pGraphics->SetCamera(
+		//	XMVectorSet(0.0f, 0.0f, -2.0f, 0.0f), // Eye
+		//	XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),  // Focus
+		//	XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)   // Up
+		//);
+         
 		// プロジェクション設定
         float aspect = static_cast< float >( m_screenWidth ) / static_cast< float >( m_screenHeight );
-        m_pGraphics->SetProjection( DirectX::XM_PI / 4.0f, aspect, 0.1f, 100.0f );
+        m_camera.Apply(m_pGraphics.get(), aspect);
+        // m_pGraphics->SetProjection( DirectX::XM_PI / 4.0f, aspect, 0.1f, 100.0f );
 
 		for (const auto& obj : m_gameObjects)
 		{
