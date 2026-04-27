@@ -127,6 +127,24 @@ namespace game
 
             obj.Update();
         }
+        // マウス移動量を取得し、画面中央にリセットすることで差分を算出する
+        POINT mousePos;
+        GetCursorPos( &mousePos );
+        const int centerX = m_screenWidth / 2;
+        const int centerY = m_screenHeight / 2;
+
+        HWND hWnd = GetForegroundWindow();
+        POINT center = {centerX, centerY};
+        ClientToScreen( hWnd, &center );
+
+        const int mouseDeltaX = mousePos.x - center.x;
+        const int mouseDeltaY = mousePos.y - center.y;
+        SetCursorPos( center.x, center.y );
+        ShowCursor( FALSE );
+
+        static constexpr float kMouseSensitivity = 0.001f;
+        m_camera.UpdateMouseLook( mouseDeltaX, mouseDeltaY, kMouseSensitivity );
+
         const float camSpeed = 5.0f * deltaTime;
         DirectX::XMFLOAT3 delta = { 0.0f, 0.0f, 0.0f };
         if (GetAsyncKeyState('W') & 0x8000) delta.z += camSpeed;

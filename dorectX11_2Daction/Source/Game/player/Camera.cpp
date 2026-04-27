@@ -1,6 +1,7 @@
 ﻿#include "Camera.h"
 #include <windows.h>
 #include <directxmath.h>
+#include <algorithm>
 
 namespace engine
 {
@@ -33,6 +34,56 @@ namespace engine
         m_focus.z += delta.z;
     }
 
+    void Camera::MoveLocal( DirectX::XMFLOAT3 localDelta )
+    {
+        // カメラのフォワード・ライト方向を求める（Y成分は除きXZ平面で移動）
+        DirectX::XMVECTOR forward = DirectX::XMVector3Normalize(
+            DirectX::XMVectorSet(
+                m_focus.x - m_eye.x,
+                0.0f,
+                m_focus.z - m_eye.z,
+                0.0f
+            )
+        );
+        DirectX::XMVECTOR right = DirectX::XMVector3Normalize(
+            DirectX::XMVector3Cross( DirectX::XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f ), forward )
+        );
+
+        DirectX::XMVECTOR move =
+            DirectX::XMVectorScale( forward, localDelta.z ) +
+            DirectX::XMVectorScale( right, localDelta.x );
+
+        DirectX::XMFLOAT3 worldDelta;
+        DirectX::XMStoreFloat3( &worldDelta, move );
+        worldDelta.y += localDelta.y;
+
+        Move( worldDelta );
+    }
+
+    void Camera::UpdateMouseLook( int mouseDeltaX, int mouseDeltaY, float sensitivity )
+    {
+        m_yaw += mouseDeltaX * sensitivity;
+        m_pitch -= mouseDeltaY * sensitivity;  // Y軸は反転（上移動→ピッチ増）
+        m_pitch = (std::clamp)( m_pitch, -kMaxPitchRad, kMaxPitchRad );
+
+        UpdateFocusFromAngles();
+    }
+
+    void Camera::UpdateFocusFromAngles()
+    {
+        // オイラー角からフォワードベクトルを算出しfocusを更新する
+        // forward.x = cos(pitch) * sin(yaw)
+        // forward.y = sin(pitch)
+        // forward.z = cos(pitch) * cos(yaw)
+        DirectX::XMFLOAT3 forward;
+        forward.x = cosf( m_pitch ) * sinf( m_yaw );
+        forward.y = sinf( m_pitch );
+        forward.z = cosf( m_pitch ) * cosf( m_yaw );
+
+        m_focus.x = m_eye.x + forward.x;
+        m_focus.y = m_eye.y + forward.y;
+        m_focus.z = m_eye.z + forward.z;
+    }
     void Camera::SetPosition(DirectX::XMFLOAT3 eye)
     {
         DirectX::XMFLOAT3 delta = {
