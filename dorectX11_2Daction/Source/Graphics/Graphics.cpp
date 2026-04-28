@@ -92,4 +92,9 @@ namespace engine
     {
         return m_renderer.GetDevice();
     }
+
+    ID3D11DeviceContext* Graphics::GetContext() const
+    {
+        return m_renderer.GetContext();
+    }
 }

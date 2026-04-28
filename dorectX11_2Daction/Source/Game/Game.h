@@ -5,6 +5,9 @@
 #include "Game/Player/Camera.h"
 #include <vector>
 #include <memory>
+#ifdef _DEBUG
+#include "DebugHUD.h"
+#endif
 
 namespace game
 {
@@ -38,5 +41,9 @@ namespace game
 		int m_screenHeight = 0;
         DWORD m_lastTime = 0;
         engine::Camera m_camera;
+#ifdef _DEBUG
+        game::DebugHUD m_debugHUD;
+        float m_deltaTime = 0.0f;
+#endif
 	};
 }

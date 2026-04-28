@@ -39,6 +39,7 @@ namespace engine
 		void Draw( Mesh* pMesh, CXMMATRIX world, const XMFLOAT4& color );
         void Draw( const engine::FbxModel& model );
 		ID3D11Device* GetDevice() const;
+		ID3D11DeviceContext* GetContext() const;
 
 	private:
 		Renderer                          m_renderer;

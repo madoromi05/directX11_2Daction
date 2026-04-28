@@ -27,6 +27,8 @@ namespace engine
         void SetPosition( DirectX::XMFLOAT3 eye );
 
         DirectX::XMFLOAT3 GetPosition() const { return m_eye; }
+        float GetYaw()   const { return m_yaw; }
+        float GetPitch() const { return m_pitch; }
 
     private:
         // ヨー・ピッチからフォワードベクトルを計算してm_focusを更新する

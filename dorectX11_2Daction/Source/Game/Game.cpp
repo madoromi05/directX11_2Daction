@@ -26,23 +26,6 @@ namespace game
             DEBUG_LOG_ERROR( "パイプラインの初期化に失敗しました" );
             return E_FAIL;
         }
-
-        // 簡単なメッシュのロード
-        //engine::SimpleVertex vertices[] =
-        //{
-        //    { XMFLOAT3( 0.0f,  0.5f, 0.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ), XMFLOAT2( 0.5f, 0.0f ) },
-        //    { XMFLOAT3( 0.5f, -0.5f, 0.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        //    { XMFLOAT3( -0.5f, -0.5f, 0.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
-        //};
-        //UINT indices[] = {0, 1, 2};
-
-        //if (FAILED( m_pTriangleMesh->Init( m_pGraphics->GetDevice(), vertices, 3, indices, 3 ) ))
-        //{
-        //    DEBUG_LOG_ERROR( "Mesh の初期化に失敗しました" );
-        //    return E_FAIL;
-        //}
-        //m_pTriangleMesh = std::make_unique<engine::Mesh>();
-
         // FBXモデルのロード
         engine::ModelLoader loader;
         auto loadedMeshes = loader.Load( m_pGraphics->GetDevice(), "Source/assets/Models/cube.fbx" );
@@ -95,6 +78,12 @@ namespace game
 
         m_lastTime = timeGetTime();
 
+#ifdef _DEBUG
+        if (FAILED(m_debugHUD.Init(m_pGraphics->GetDevice(), m_pGraphics->GetContext(),
+                                   hWnd, m_screenWidth, m_screenHeight)))
+            DEBUG_LOG_WARNING("DebugHUD init failed (continuing)");
+#endif
+
         DEBUG_LOG( "初期化完了" );
 		return S_OK;
 	}
@@ -105,6 +94,10 @@ namespace game
         float deltaTime = ( currentTime - m_lastTime ) * 0.001f;
         m_lastTime = currentTime;
         if (deltaTime > 0.1f) deltaTime = 0.1f;
+
+#ifdef _DEBUG
+        m_deltaTime = deltaTime;
+#endif
 
         for (int i = 0; i < kMaxModel; i++)
         {
@@ -180,6 +173,10 @@ namespace game
                 m_pGraphics->Draw( pMesh, mWorld, obj.GetColor() );
             }
 		}
+
+#ifdef _DEBUG
+        m_debugHUD.Render(m_pGraphics->GetContext(), m_camera, m_deltaTime);
+#endif
 
 		m_pGraphics->EndRender();
 	}
