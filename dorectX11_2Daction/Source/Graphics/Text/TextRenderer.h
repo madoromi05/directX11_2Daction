@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifdef _DEBUG
 
 #include <d3d11.h>
@@ -43,4 +43,4 @@ namespace engine
     };
 }
 
-#endif // _DEBUG
+#endif

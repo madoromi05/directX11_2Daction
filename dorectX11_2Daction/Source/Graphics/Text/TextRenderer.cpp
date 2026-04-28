@@ -1,4 +1,4 @@
-#ifdef _DEBUG
+﻿#ifdef _DEBUG
 #include "TextRenderer.h"
 #include "Debug.h"
 #include <d3dcompiler.h>
@@ -184,6 +184,12 @@ namespace engine
         pContext->RSSetState(m_pRaster.Get());
 
         pContext->Draw(static_cast<UINT>(verts.size()), 0);
+
+        // フォントアトラスをtextだけに制限するためのコード
+        ID3D11ShaderResourceView* nullSRV = nullptr;
+        pContext->PSSetShaderResources(0, 1, &nullSRV);
+        pContext->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
+        pContext->OMSetDepthStencilState(nullptr, 0);
     }
 }
 #endif // _DEBUG

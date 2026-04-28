@@ -1,4 +1,4 @@
-#ifdef _DEBUG
+﻿#ifdef _DEBUG
 #include "DebugHUD.h"
 #include "Game/Player/Camera.h"
 #include "Debug.h"
@@ -52,4 +52,4 @@ namespace game
             10.0f, 10.0f, { 1.0f, 1.0f, 1.0f, 1.0f });
     }
 }
-#endif // _DEBUG
+#endif

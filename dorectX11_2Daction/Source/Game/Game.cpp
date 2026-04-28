@@ -105,18 +105,18 @@ namespace game
             auto& motion = m_motions[i];
 
             // 自転: 各軸を毎フレーム回転
-            auto rot = obj.GetRotation();
-            rot.x += motion.rotSpeed.x * deltaTime;
-            rot.y += motion.rotSpeed.y * deltaTime;
-            rot.z += motion.rotSpeed.z * deltaTime;
-            obj.SetRotation( rot );
+            //auto rot = obj.GetRotation();
+            //rot.x += motion.rotSpeed.x * deltaTime;
+            //rot.y += motion.rotSpeed.y * deltaTime;
+            //rot.z += motion.rotSpeed.z * deltaTime;
+            //obj.SetRotation( rot );
 
             // 公転: XY平面上の円軌道（Z深度は固定）
-            motion.orbitAngle += motion.orbitSpeed * deltaTime;
-            float x = motion.orbitRadius * cosf( motion.orbitAngle );
-            float y = motion.orbitCenterY + motion.orbitRadius * sinf( motion.orbitAngle );
-            auto pos = obj.GetPos();
-            obj.SetPos( XMFLOAT3( x, y, pos.z ) );
+            //motion.orbitAngle += motion.orbitSpeed * deltaTime;
+            //float x = motion.orbitRadius * cosf( motion.orbitAngle );
+            //float y = motion.orbitCenterY + motion.orbitRadius * sinf( motion.orbitAngle );
+            //auto pos = obj.GetPos();
+            //obj.SetPos( XMFLOAT3( x, y, pos.z ) );
 
             obj.Update();
         }
@@ -146,7 +146,7 @@ namespace game
         if (GetAsyncKeyState('D') & 0x8000) delta.x += camSpeed;
         if (GetAsyncKeyState('Q') & 0x8000) delta.y += camSpeed;
         if (GetAsyncKeyState('E') & 0x8000) delta.y -= camSpeed;
-        m_camera.Move(delta);
+        m_camera.MoveLocal(delta);
     }
 	
 	void Game::Render()
