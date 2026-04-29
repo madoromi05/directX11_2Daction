@@ -62,7 +62,7 @@ namespace engine
         m_mProj = XMMatrixPerspectiveFovLH( fovY, aspect, nearZ, farZ );
     }
 
-    void Graphics::Draw( Mesh* pMesh, CXMMATRIX world, const XMFLOAT4& color )
+    void Graphics::MeshDraw( Mesh* pMesh, CXMMATRIX world, const XMFLOAT4& color )
     {
         ID3D11DeviceContext* pContext = m_renderer.GetContext();
 
@@ -78,13 +78,13 @@ namespace engine
         pMesh->Draw( pContext );
     }
 
-    void Graphics::Draw( const engine::FbxModel& model ) {
+    void Graphics::FbxDraw( const engine::FbxModel& model ) {
         const auto& go = model.GetGameObject();
         DirectX::XMMATRIX world = go.GetWorldMatrix();
         DirectX::XMFLOAT4 color = go.GetColor();
 
         for (Mesh* mesh : go.GetMeshes()) {
-            Draw( mesh, world, color );  // 既存のDraw()を再利用
+            MeshDraw( mesh, world, color );  // 既存のDraw()を再利用
         }
     }
 

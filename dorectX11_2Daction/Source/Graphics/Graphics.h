@@ -36,8 +36,8 @@ namespace engine
 		void SetProjection( float fovY, float aspect, float nearZ, float farZ );
 
 		// WVP合成 → 定数バッファ更新 → メッシュ描画を行う。
-		void Draw( Mesh* pMesh, CXMMATRIX world, const XMFLOAT4& color );
-        void Draw( const engine::FbxModel& model );
+		void MeshDraw( Mesh* pMesh, CXMMATRIX world, const XMFLOAT4& color );
+        void FbxDraw( const engine::FbxModel& model );
 		ID3D11Device* GetDevice() const;
 		ID3D11DeviceContext* GetContext() const;
 
