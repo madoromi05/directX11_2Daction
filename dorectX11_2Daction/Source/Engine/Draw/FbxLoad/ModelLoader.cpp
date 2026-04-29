@@ -3,6 +3,7 @@
 #include "Engine/Mesh.h"
 #include "Engine/ShaderCode/SimpleVertex.h"
 #include "Debug.h"
+#include <DirectXTex.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>

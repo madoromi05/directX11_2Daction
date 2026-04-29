@@ -36,7 +36,7 @@
     <ClCompile Include="Source\Engine\Text\TextRenderer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\FbxLoad\ModelLoader.cpp">
+    <ClCompile Include="Source\Engine\Draw\FbxLoad\ModelLoader.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\GameObject.cpp">
@@ -57,7 +57,7 @@
     <ClCompile Include="Source\Engine\ShaderCode\VertexShader.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Texture\Texture.cpp">
+    <ClCompile Include="Source\Engine\Draw\Texture\Texture.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,10 +86,10 @@
     <ClInclude Include="Source\Engine\Text\TextRenderer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\FbxLoad\FbxModel.h">
+    <ClInclude Include="Source\Engine\Draw\FbxLoad\FbxModel.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\FbxLoad\ModelLoader.h">
+    <ClInclude Include="Source\Engine\Draw\FbxLoad\ModelLoader.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\GameObject.h">
@@ -116,10 +116,10 @@
     <ClInclude Include="Source\Engine\ShaderCode\VertexShader.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Texture\SamplerType.h">
+    <ClInclude Include="Source\Engine\Draw\Texture\SamplerType.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Texture\Texture.h">
+    <ClInclude Include="Source\Engine\Draw\Texture\Texture.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
