@@ -5,7 +5,7 @@
 #include "ShaderCode/PixelShader.h"
 #include "ShaderCode/ConstantBuffer.h"
 #include "ShaderCode/SimpleShaderConstantBuffer.h"
-#include "Graphics/FbxLoad/FbxModel.h"
+#include "FbxLoad/FbxModel.h"
 #include <DirectXMath.h>
 
 using namespace DirectX;

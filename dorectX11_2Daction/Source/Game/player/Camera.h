@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Graphics/Graphics.h"
+#include "Engine/Graphics.h"
 #include <DirectXMath.h>
 
 namespace engine { class Graphics; }

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Window.h"
-#include "../Graphics/Graphics.h"
-#include "../Graphics/GameObject.h"
+#include "Engine/Graphics.h"
+#include "Engine/GameObject.h"
 #include "Game/Player/Camera.h"
 #include <vector>
 #include <memory>

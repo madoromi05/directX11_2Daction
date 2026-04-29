@@ -30,5 +30,4 @@ namespace engine
         // 異方性フィルタリングの最大レベル
         static constexpr UINT kMaxAnisotropy = 4;
     };
-
 }

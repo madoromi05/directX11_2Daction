@@ -1,7 +1,7 @@
 ﻿#define NOMINMAX
 #include "ModelLoader.h"
-#include "Graphics/Mesh.h"
-#include "Graphics/ShaderCode/SimpleVertex.h"
+#include "Engine/Mesh.h"
+#include "Engine/ShaderCode/SimpleVertex.h"
 #include "Debug.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

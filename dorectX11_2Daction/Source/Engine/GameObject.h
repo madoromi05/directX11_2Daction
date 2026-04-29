@@ -3,6 +3,9 @@
 #include <vector>
 #include "Mesh.h"
 
+/*
+ オブジェクトの位置、角度を管理するコード
+*/
 using namespace DirectX;
 
 namespace engine

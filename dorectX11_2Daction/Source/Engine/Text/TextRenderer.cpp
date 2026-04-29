@@ -115,7 +115,7 @@ namespace engine
 
         const int lineH = atlas.GetLineHeight();
         float cx = x;
-        float cy = y + lineH;  // cy = baseline (Y increases downward)
+        float cy = y + lineH;
 
         for (const char* p = text; *p; ++p)
         {
@@ -192,4 +192,4 @@ namespace engine
         pContext->OMSetDepthStencilState(nullptr, 0);
     }
 }
-#endif // _DEBUG
+#endif

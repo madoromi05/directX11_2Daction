@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Graphics/Mesh.h"
+#include "Engine/Mesh.h"
 #include <d3d11.h>
 #include <string>
 #include <vector>

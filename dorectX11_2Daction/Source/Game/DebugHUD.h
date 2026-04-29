@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 #ifdef _DEBUG
 
 #include <d3d11.h>
 #include <windows.h>
 #include <memory>
-#include "Graphics/Text/FontAtlas.h"
-#include "Graphics/Text/TextRenderer.h"
+#include "Engine/Text/FontAtlas.h"
+#include "Engine/Text/TextRenderer.h"
 
 namespace engine { class Camera; }
 

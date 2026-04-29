@@ -20,41 +20,41 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\DebugHUD.cpp" />
-    <ClCompile Include="Source\Graphics\Text\FontAtlas.cpp" />
-    <ClCompile Include="Source\Graphics\Text\TextRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Text\FontAtlas.cpp" />
+    <ClCompile Include="Source\Engine\Text\TextRenderer.cpp" />
     <ClCompile Include="Source\Game\Game.cpp" />
     <ClCompile Include="Source\Game\Player\Camera.cpp" />
-    <ClCompile Include="Source\Graphics\FbxLoad\ModelLoader.cpp" />
-    <ClInclude Include="Source\Graphics\ShaderCode\ConstantBuffer.h" />
-    <ClCompile Include="Source\Graphics\GameObject.cpp" />
-    <ClCompile Include="Source\Graphics\Graphics.cpp" />
-    <ClCompile Include="Source\Graphics\Mesh.cpp" />
-    <ClCompile Include="Source\Graphics\ShaderCode\PixelShader.cpp" />
-    <ClCompile Include="Source\Graphics\Renderer.cpp" />
-    <ClCompile Include="Source\Graphics\ShaderCode\VertexShader.cpp" />
-    <ClCompile Include="Source\Graphics\Texture\Texture.cpp" />
+    <ClCompile Include="Source\Engine\FbxLoad\ModelLoader.cpp" />
+    <ClInclude Include="Source\Engine\ShaderCode\ConstantBuffer.h" />
+    <ClCompile Include="Source\Engine\GameObject.cpp" />
+    <ClCompile Include="Source\Engine\Graphics.cpp" />
+    <ClCompile Include="Source\Engine\Mesh.cpp" />
+    <ClCompile Include="Source\Engine\ShaderCode\PixelShader.cpp" />
+    <ClCompile Include="Source\Engine\Renderer.cpp" />
+    <ClCompile Include="Source\Engine\ShaderCode\VertexShader.cpp" />
+    <ClCompile Include="Source\Engine\Texture\Texture.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Debug.h" />
     <ClInclude Include="Source\Game\DebugHUD.h" />
-    <ClInclude Include="Source\Graphics\Text\FontAtlas.h" />
-    <ClInclude Include="Source\Graphics\Text\TextRenderer.h" />
+    <ClInclude Include="Source\Engine\Text\FontAtlas.h" />
+    <ClInclude Include="Source\Engine\Text\TextRenderer.h" />
     <ClInclude Include="Source\Game\Game.h" />
     <ClInclude Include="Source\Game\Player\Camera.h" />
-    <ClInclude Include="Source\Graphics\FbxLoad\FbxModel.h" />
-    <ClInclude Include="Source\Graphics\FbxLoad\ModelLoader.h" />
-    <ClInclude Include="Source\Graphics\GameObject.h" />
-    <ClInclude Include="Source\Graphics\Graphics.h" />
-    <ClInclude Include="Source\Graphics\Mesh.h" />
-    <ClInclude Include="Source\Graphics\ShaderCode\PixelShader.h" />
-    <ClInclude Include="Source\Graphics\Renderer.h" />
-    <ClInclude Include="Source\Graphics\ShaderCode\SimpleShaderConstantBuffer.h" />
-    <ClInclude Include="Source\Graphics\ShaderCode\SimpleVertex.h" />
-    <ClInclude Include="Source\Graphics\ShaderCode\VertexShader.h" />
-    <ClInclude Include="Source\Graphics\Texture\SamplerType.h" />
-    <ClInclude Include="Source\Graphics\Texture\Texture.h" />
+    <ClInclude Include="Source\Engine\FbxLoad\FbxModel.h" />
+    <ClInclude Include="Source\Engine\FbxLoad\ModelLoader.h" />
+    <ClInclude Include="Source\Engine\GameObject.h" />
+    <ClInclude Include="Source\Engine\Graphics.h" />
+    <ClInclude Include="Source\Engine\Mesh.h" />
+    <ClInclude Include="Source\Engine\ShaderCode\PixelShader.h" />
+    <ClInclude Include="Source\Engine\Renderer.h" />
+    <ClInclude Include="Source\Engine\ShaderCode\SimpleShaderConstantBuffer.h" />
+    <ClInclude Include="Source\Engine\ShaderCode\SimpleVertex.h" />
+    <ClInclude Include="Source\Engine\ShaderCode\VertexShader.h" />
+    <ClInclude Include="Source\Engine\Texture\SamplerType.h" />
+    <ClInclude Include="Source\Engine\Texture\Texture.h" />
     <ClInclude Include="Source\Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +109,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -122,7 +122,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -149,7 +149,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source;$(SolutionDir)packages\freetype.2.8.0.1\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/Source;$(SolutionDir)packages\freetype.2.8.0.1\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,7 +165,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source;$(SolutionDir)packages\freetype.2.8.0.1\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/Source;$(SolutionDir)packages\freetype.2.8.0.1\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -179,7 +179,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)/dorectX11_2Daction/Source;$(SolutionDir)packages\freetype.2.8.0.1\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/Source;$(SolutionDir)packages\freetype.2.8.0.1\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -196,7 +196,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source;$(SolutionDir)packages\freetype.2.8.0.1\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/Source;$(SolutionDir)packages\freetype.2.8.0.1\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

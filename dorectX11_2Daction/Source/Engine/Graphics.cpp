@@ -62,6 +62,7 @@ namespace engine
         m_mProj = XMMatrixPerspectiveFovLH( fovY, aspect, nearZ, farZ );
     }
 
+    //meshを一個だけ描画するコード
     void Graphics::MeshDraw( Mesh* pMesh, CXMMATRIX world, const XMFLOAT4& color )
     {
         ID3D11DeviceContext* pContext = m_renderer.GetContext();

@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include "Graphics/FbxLoad/ModelLoader.h"
-#include "Graphics/Mesh.h"
-#include "Graphics/GameObject.h"
+#include "FbxLoad/ModelLoader.h"
+#include "Mesh.h"
+#include "GameObject.h"
 #include <vector>
 #include <string>
 #include <memory>

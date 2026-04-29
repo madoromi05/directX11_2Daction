@@ -1,6 +1,6 @@
 ﻿#include "Game.h"
 #include "Debug.h"
-#include "Graphics/FbxLoad/ModelLoader.h"
+#include "Engine/FbxLoad/ModelLoader.h"
 #include <random>
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
@@ -170,7 +170,7 @@ namespace game
 			XMMATRIX mWorld = obj.GetWorldMatrix();
             for (engine::Mesh* pMesh : obj.GetMeshes())
             {
-                m_pGraphics->Draw( pMesh, mWorld, obj.GetColor() );
+                m_pGraphics->MeshDraw( pMesh, mWorld, obj.GetColor() );
             }
 		}
 

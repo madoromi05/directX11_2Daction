@@ -56,5 +56,4 @@ namespace engine
         sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
         return pDevice->CreateSamplerState( &sd, m_pSamplerClamp.GetAddressOf() );
     }
-
 }
